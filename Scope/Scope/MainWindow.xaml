@@ -6,8 +6,13 @@
         xmlns:local="clr-namespace:Scope"
         xmlns:controls="clr-namespace:Scope.Controls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="300" Width="600" MinHeight="200" MinWidth="200">
+        Title="MainWindow" Height="300" Width="500" MinHeight="200" MinWidth="200">
     <Grid>
-        <controls:SignalDisplay />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <controls:SignalDisplay Grid.Row="0" x:Name="SignalDisplay" />
+        <Button Grid.Row="1" Click="Button_Click">Generate trace</Button>
     </Grid>
 </Window>

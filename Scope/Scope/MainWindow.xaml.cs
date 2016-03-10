@@ -24,5 +24,11 @@ namespace Scope
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Signal signal = new Signal();
+            SignalDisplay.AddSignal(signal);
+        }
     }
 }

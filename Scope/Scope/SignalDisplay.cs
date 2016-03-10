@@ -27,7 +27,10 @@ namespace Scope.Controls
         {
             get
             {
-                return Math.Min(Math.Max((int)Math.Round(ActualWidth / ActualHeight) * majorVerticalDivisions, 4), 50);
+                int calculated = (int)Math.Round(ActualWidth / ActualHeight * majorVerticalDivisions);
+                if (calculated % 2 != 0)
+                    calculated += 1;    //enforce that the number is even
+                return Math.Min(Math.Max(calculated, 4), 50);
             }
         } //depending on width to height ratio
 
@@ -59,6 +62,7 @@ namespace Scope.Controls
         {
             Signals.Add(signal);
             Changed = true;
+            this.InvalidateVisual();
         }
 
         private void DrawGraticule(DrawingContext dc)
@@ -101,6 +105,27 @@ namespace Scope.Controls
             if (Signals.Count == 0)
                 return;
 
+            foreach (Signal signal in Signals)
+            {
+                int startIndex = signal.StartIndexInsideInterval(StartTime, EndTime);
+                if (startIndex == -1)
+                    continue;   //signal does not occupy the screen
+
+                Brush signalBrush = new SolidColorBrush(signal.Color);
+                Pen signalPen = new Pen(signalBrush, 1.0);
+
+                for (int i = startIndex; i < signal.Points.Length && signal.Points[i].time < EndTime; i++)
+                {
+                    double time = signal.Points[i].time;
+                    double value = signal.Points[i].value;
+
+                    double x = ((time - StartTime) * ActualWidth) / (EndTime - StartTime);
+                    double y = (ActualHeight / 2) - value;
+
+
+                    dc.DrawRectangle(signalBrush, null, new Rect(x, y, 1, 1));
+                }
+            }
         }
 
         protected override void OnRender(DrawingContext dc)
@@ -110,11 +135,9 @@ namespace Scope.Controls
             if (Changed)
             {
                 Changed = false;
+                
+                DrawSignals(dc);
                 DrawGraticule(dc);
-                foreach (Signal signal in Signals)
-                {
-                    DrawSignals(dc);
-                }
             }
         }
 
