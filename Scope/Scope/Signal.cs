@@ -51,15 +51,10 @@ namespace Scope
         }
         #endregion
 
-        public Signal()
+        public Signal(SignalPoint[] points, Color color)
         {
-            Color = Colors.Red;
-            Points = new SignalPoint[1600];
-
-            for (int x = 1; x <= 1600; x++)
-            {
-                Points[x - 1] = new SignalPoint(((double)x) / 100.0, (Math.Sin((double)x * (4 * Math.PI / 1600.0)) * 100.0));
-            }
+            Color = color;
+            Points = points;
         }
 
         public int StartIndexInsideInterval(double start, double end)

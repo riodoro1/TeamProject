@@ -27,8 +27,30 @@ namespace Scope
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Signal signal = new Signal();
+            SignalPoint[] points = new SignalPoint[1600];
+
+            for (int x = 1; x <= 1600; x++)
+            {
+                points[x - 1] = new SignalPoint(((double)x) / 100.0, (Math.Sin((double)x * (4 * Math.PI / 1600.0)) * 100.0));
+            }
+
+            Signal signal = new Signal(points, Colors.Red);
             SignalDisplay.AddSignal(signal);
+            ((Button)sender).IsEnabled = false;
+        }
+
+        private void Button2_Click(object sender, RoutedEventArgs e)
+        {
+            SignalPoint[] points = new SignalPoint[800];
+
+            for (int x = 1; x <= 800; x++)
+            {
+                points[x - 1] = new SignalPoint(((double)x) / 100.0 + 4, (Math.Cos((double)x * (2 * Math.PI / 800.0)) * 100.0));
+            }
+
+            Signal signal = new Signal(points, Colors.Green);
+            SignalDisplay.AddSignal(signal);
+            ((Button)sender).IsEnabled = false;
         }
     }
 }

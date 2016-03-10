@@ -13,6 +13,9 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <controls:SignalDisplay Grid.Row="0" x:Name="SignalDisplay" />
-        <Button Grid.Row="1" Click="Button_Click">Generate trace</Button>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button Click="Button_Click">Generate trace 1</Button>
+            <Button Click="Button2_Click">Generate trace 2</Button>
+        </StackPanel>
     </Grid>
 </Window>
