@@ -113,10 +113,10 @@ namespace Scope.Controls
 
                 Brush signalBrush = new SolidColorBrush(signal.Color);
 
-                for (int i = startIndex; i < signal.Points.Length && signal.Points[i].time < EndTime; i++)
+                for (int i = startIndex; i < signal.Points.Length && signal.Points[i].X < EndTime; i++)
                 {
-                    double time = signal.Points[i].time;
-                    double value = signal.Points[i].value;
+                    double time = signal.Points[i].X;
+                    double value = signal.Points[i].Y;
 
                     double x = ((time - StartTime) * ActualWidth) / (EndTime - StartTime);
                     double y = (ActualHeight / 2) - value;

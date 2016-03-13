@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 
 namespace Scope
 {
+    /*
     public class SignalPoint
     {
         public double time;
@@ -17,41 +19,43 @@ namespace Scope
             this.time = time;
             this.value = value;
         }
-    }
+    } 
+    */
+
     public class Signal
     {
         #region Properties
-        public SignalPoint[] Points;
+        public Point[] Points;
         public Color Color;
         #endregion
 
         #region Computed properties
-        public Double StartTime
+        public Double FirstXValue
         {
             get
             {
-                return Points[0].time;
+                return Points[0].X;
             }
         }
 
-        public Double EndTime
+        public Double LastXValue
         {
             get
             {
-                return Points[Points.Length - 1].time;
+                return Points[Points.Length - 1].X;
             }
         }
 
-        public Double DeltaT
+        public Double XStep
         {
             get
             {
-                return (StartTime - EndTime) / Points.Length;
+                return (FirstXValue - LastXValue) / Points.Length;
             }
         }
         #endregion
 
-        public Signal(SignalPoint[] points, Color color)
+        public Signal(Point[] points, Color color)
         {
             Color = color;
             Points = points;
@@ -62,7 +66,7 @@ namespace Scope
             //TODO: more optimal solution assuming the Points array is sorted. (binary search maybe?)
             for (int i = 0; i < Points.Length; i++)
             {
-                if (Points[i].time > start && Points[i].time < end)
+                if (Points[i].X > start && Points[i].X < end)
                     return i;
             }
             return -1;
