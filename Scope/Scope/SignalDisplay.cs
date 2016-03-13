@@ -112,7 +112,6 @@ namespace Scope.Controls
                     continue;   //signal does not occupy the screen
 
                 Brush signalBrush = new SolidColorBrush(signal.Color);
-                Pen signalPen = new Pen(signalBrush, 1.0);
 
                 for (int i = startIndex; i < signal.Points.Length && signal.Points[i].time < EndTime; i++)
                 {
