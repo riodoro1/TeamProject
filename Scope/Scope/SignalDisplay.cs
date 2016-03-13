@@ -123,6 +123,8 @@ namespace Scope.Controls
 
 
                     dc.DrawRectangle(signalBrush, null, new Rect(x, y, 1, 1));
+
+                    //o la boga
                 }
             }
         }
