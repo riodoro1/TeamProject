@@ -8,25 +8,14 @@ using System.Windows.Media;
 
 namespace Scope
 {
-    /*
-    public class SignalPoint
-    {
-        public double time;
-        public double value;
-
-        public SignalPoint(double time, double value)
-        {
-            this.time = time;
-            this.value = value;
-        }
-    } 
-    */
-
-    public class Signal
+    public abstract class Signal
     {
         #region Properties
         public Point[] Points;
-        public Color Color;
+        public Color Color { get; set; }
+        public String Name { get; set; }
+        public virtual String HorizontalUnit { get; }
+        public virtual String VerticalUnit { get; protected set; }
         #endregion
 
         #region Computed properties
@@ -55,10 +44,11 @@ namespace Scope
         }
         #endregion
 
-        public Signal(Point[] points, Color color)
+        public Signal(Point[] points, Color color, String name)
         {
             Color = color;
             Points = points;
+            Name = name;
         }
 
         public int StartIndexInsideInterval(double start, double end)

@@ -119,8 +119,7 @@ namespace Scope.Controls
                     double value = signal.Points[i].Y;
 
                     double x = ((time - StartTime) * ActualWidth) / (EndTime - StartTime);
-                    double y = (ActualHeight / 2) - value;
-
+                    double y = (ActualHeight / 2) - (value * ActualHeight/majorVerticalDivisions);
 
                     dc.DrawRectangle(signalBrush, null, new Rect(x, y, 1, 1));
                 }

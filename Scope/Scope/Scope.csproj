@@ -57,6 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="SignalDisplay.cs" />
     <Compile Include="Signal.cs" />
+    <Compile Include="TimeDomainSignal.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

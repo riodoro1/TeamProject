@@ -31,10 +31,10 @@ namespace Scope
 
             for (int x = 1; x <= 1600; x++)
             {
-                points[x - 1] = new Point(((double)x) / 100.0, (Math.Sin((double)x * (4 * Math.PI / 1600.0)) * 100.0));
+                points[x - 1] = new Point(((double)x) / 100.0, (Math.Sin((double)x * (4 * Math.PI / 1600.0)) * 2.0));
             }
 
-            Signal signal = new Signal(points, Colors.Red);
+            Signal signal = new TimeDomainSignal(points, Colors.Red);
             SignalDisplay.AddSignal(signal);
             ((Button)sender).IsEnabled = false;
         }
@@ -45,10 +45,10 @@ namespace Scope
 
             for (int x = 1; x <= 800; x++)
             {
-                points[x - 1] = new Point(((double)x) / 100.0 + 4, (Math.Cos((double)x * (2 * Math.PI / 800.0)) * 100.0));
+                points[x - 1] = new Point(((double)x) / 100.0 + 4, (Math.Cos((double)x * (2 * Math.PI / 800.0)) * 2.0));
             }
 
-            Signal signal = new Signal(points, Colors.Green);
+            Signal signal = new TimeDomainSignal(points, Colors.Green);
             SignalDisplay.AddSignal(signal);
             ((Button)sender).IsEnabled = false;
         }
