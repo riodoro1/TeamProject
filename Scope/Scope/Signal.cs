@@ -14,6 +14,7 @@ namespace Scope
         public Point[] Points;
         public Color Color { get; set; }
         public String Name { get; set; }
+        public Boolean Visible { get; set; } = true;
         public virtual String HorizontalUnit { get; }
         public virtual String VerticalUnit { get; protected set; }
         #endregion

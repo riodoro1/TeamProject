@@ -46,7 +46,7 @@ namespace Scope.Controls
             }
         }
         public Color GraticuleColor { get; set; } = Colors.Gray;
-        #endregion
+        #endregion      
 
         static SignalDisplay()
         {
@@ -107,6 +107,9 @@ namespace Scope.Controls
 
             foreach (Signal signal in Signals)
             {
+                if (!signal.Visible)
+                    continue;
+
                 int startIndex = signal.StartIndexInsideInterval(StartTime, EndTime);
                 if (startIndex == -1)
                     continue;   //signal does not occupy the screen
