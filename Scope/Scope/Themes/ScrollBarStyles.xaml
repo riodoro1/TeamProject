@@ -49,9 +49,9 @@
                             <RowDefinition Height="0.00001*" />
                         </Grid.RowDefinitions>
                         <Track x:Name="PART_Track"
-                            Grid.Row="0"
-                            IsDirectionReversed="True"
-                            Focusable="False">
+                               Grid.Row="0"
+                               IsDirectionReversed="True"
+                               Focusable="False">
                             
                             <Track.Thumb>
                                 <Thumb x:Name="Thumb"
@@ -63,7 +63,7 @@
                                 <RepeatButton x:Name="PageUp" 
                                               Command="ScrollBar.PageDownCommand"
                                               Style="{StaticResource SignalScrollBarTrackRepeatButton}"
-                                              Focusable="false" 
+                                              Focusable="false"
                                               Background="{TemplateBinding Foreground}" />
                             </Track.IncreaseRepeatButton>
                             
@@ -71,7 +71,7 @@
                                 <RepeatButton x:Name="PageDown"
                                               Command="ScrollBar.PageUpCommand"
                                               Style="{StaticResource SignalScrollBarTrackRepeatButton}"
-                                              Focusable="false" 
+                                              Focusable="false"
                                               Background="{TemplateBinding Foreground}" />
                             </Track.DecreaseRepeatButton>
                             
@@ -79,21 +79,7 @@
                     </Grid>
                     
                     <ControlTemplate.Triggers>
-                        <Trigger SourceName="Thumb"
-                                 Property="IsMouseOver"
-                                 Value="true">
-                            <Setter Value="{DynamicResource ButtonSelectBrush}"
-                                    TargetName="Thumb"
-                                    Property="Background" />
-                        </Trigger>
                         
-                        <Trigger SourceName="Thumb"
-                                 Property="IsDragging"
-                                 Value="true">
-                            <Setter Value="{DynamicResource DarkBrush}"
-                                    TargetName="Thumb"
-                                    Property="Background" />
-                        </Trigger>
 
                         <Trigger Property="IsEnabled"
                                  Value="false">

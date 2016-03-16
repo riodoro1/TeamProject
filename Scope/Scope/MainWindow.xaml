@@ -26,14 +26,20 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        
-        <controls:SignalDisplay Grid.Row="0" Grid.Column="0" x:Name="SignalDisplay" />
 
-        <controls:SignalScrollBar Grid.Row="1" Orientation="Horizontal" Height="20" />
+        <controls:SignalScrollBar x:Name="SignalScrollBar"
+                                  Minimum="0"
+                                  Maximum="0"
+                                  Grid.Row="1" 
+                                  Orientation="Horizontal" 
+                                  Height="20" />
+
+        <controls:SignalDisplay x:Name="SignalDisplay" Grid.Row="0" Grid.Column="0" ScrollBar="{Binding ElementName=SignalScrollBar}" />
 
         <StackPanel Grid.Row="2" Grid.Column="0" Margin="5,0" Orientation="Horizontal">
-            <Button Margin="5,0" Click="Button_Click">Generate trace 1</Button>
-            <Button Margin="5,0" Click="Button2_Click">Generate trace 2</Button>
+            <Button Name="Button1" Margin="5,0" Click="Button1_Click">Generate trace 1</Button>
+            <Button Name="Button2" Margin="5,0" Click="Button2_Click">Generate trace 2</Button>
+            <Button Name="Button3" Margin="5,0" Click="Button3_Click">Remove traces</Button>
         </StackPanel>
 
     </Grid>

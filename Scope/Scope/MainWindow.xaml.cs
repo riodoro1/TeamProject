@@ -25,13 +25,13 @@ namespace Scope
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button1_Click(object sender, RoutedEventArgs e)
         {
-            Point[] points = new Point[1600];
+            Point[] points = new Point[1801];
 
-            for (int x = 1; x <= 1600; x++)
+            for (int x = 0; x <= 1800; x++)
             {
-                points[x - 1] = new Point(((double)x) / 100.0, (Math.Sin((double)x * (4 * Math.PI / 1600.0)) * 2.0));
+                points[x] = new Point(((double)x) / 50.0, (Math.Sin((double)x * (4 * Math.PI / 1800.0)) * 2.0));
             }
 
             Signal signal = new TimeDomainSignal(points, Colors.Red);
@@ -41,16 +41,23 @@ namespace Scope
 
         private void Button2_Click(object sender, RoutedEventArgs e)
         {
-            Point[] points = new Point[800];
+            Point[] points = new Point[501];
 
-            for (int x = 1; x <= 800; x++)
+            for (int x = 0; x <= 500; x++)
             {
-                points[x - 1] = new Point(((double)x) / 100.0 + 4, (Math.Cos((double)x * (2 * Math.PI / 800.0)) * 2.0));
+                points[x] = new Point(((double)x) / 50.0 - 5.0, (Math.Cos((double)x * (2 * Math.PI / 500.0)) * 4.0));
             }
 
             Signal signal = new TimeDomainSignal(points, Colors.Green);
             SignalDisplay.AddSignal(signal);
             ((Button)sender).IsEnabled = false;
+        }
+
+        private void Button3_Click(object sender, RoutedEventArgs e)
+        {
+            SignalDisplay.ClearSignals();
+            Button1.IsEnabled = true;
+            Button2.IsEnabled = true;
         }
     }
 }

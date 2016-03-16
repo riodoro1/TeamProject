@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +20,6 @@ namespace Scope.Controls
     public class SignalDisplay : Canvas
     {
         #region Properties
-        private bool Changed = true;
         public List<Signal> Signals { get; private set; }
 
         private int majorVerticalDivisions = 8;
@@ -46,7 +46,79 @@ namespace Scope.Controls
             }
         }
         public Color GraticuleColor { get; set; } = Colors.Gray;
-        #endregion      
+
+        public Double MinimumTime
+        {
+            get
+            {
+                Double minimum = 0;
+                foreach (Signal signal in Signals)
+                {
+                    if (signal.FirstXValue < minimum)
+                        minimum = signal.FirstXValue;
+                }
+                return minimum;
+            }
+        }
+        public Double MaximumTime
+        {
+            get
+            {
+                Double maximum = 0;
+                foreach (Signal signal in Signals)
+                {
+                    if (signal.LastXValue > maximum)
+                        maximum = signal.LastXValue;
+                }
+                return maximum;
+            }
+        }
+        #endregion
+
+        #region Dependency properties
+        public static readonly DependencyProperty ScrollBarProperty = DependencyProperty.Register("ScrollBar", typeof(SignalScrollBar), typeof(SignalDisplay), new UIPropertyMetadata(null));
+        public SignalScrollBar ScrollBar
+        {
+            set
+            {
+                SetValue(ScrollBarProperty, value);
+            }
+            get
+            {
+                return (SignalScrollBar)GetValue(ScrollBarProperty);
+            }
+        }
+        #endregion
+
+        #region Supporting methods
+        private void UpdateScrollBar()
+        {
+            if (ScrollBar == null)
+                return;
+            if (OnScrollBarValueChangedHandler == null)
+            {
+                OnScrollBarValueChangedHandler = new RoutedPropertyChangedEventHandler<double>(OnScrollBarValueChanged);
+                ScrollBar.ValueChanged += OnScrollBarValueChangedHandler;
+            }
+
+            Double viewPortSize = EndTime - StartTime;
+            Double scrollBarMinimum = MinimumTime;
+            Double scrollBarMaximum = Math.Max(MaximumTime, EndTime) - viewPortSize;
+            Double scrollBarValue = StartTime;
+
+            ScrollBar.Minimum = scrollBarMinimum;
+            ScrollBar.Maximum = scrollBarMaximum;
+            ScrollBar.ViewportSize = viewPortSize;
+            ScrollBar.Value = scrollBarValue;
+        }
+
+        private RoutedPropertyChangedEventHandler<double> OnScrollBarValueChangedHandler = null;
+        private void OnScrollBarValueChanged(Object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            StartTime = (sender as SignalScrollBar).Value;
+            this.InvalidateVisual();
+        }
+        #endregion
 
         static SignalDisplay()
         {
@@ -61,7 +133,25 @@ namespace Scope.Controls
         public void AddSignal(Signal signal)
         {
             Signals.Add(signal);
-            Changed = true;
+            UpdateScrollBar();
+            this.InvalidateVisual();
+        }
+
+        public Boolean RemoveSignal(Signal signal)
+        {
+            Boolean removed = Signals.Remove(signal);
+            if (removed)
+            {
+                UpdateScrollBar();
+                this.InvalidateVisual();
+            }
+            return removed;
+        }
+
+        public void ClearSignals()
+        {
+            Signals.Clear();
+            UpdateScrollBar();
             this.InvalidateVisual();
         }
 
@@ -132,21 +222,15 @@ namespace Scope.Controls
         protected override void OnRender(DrawingContext dc)
         {
             base.OnRender(dc);
-
-            if (Changed)
-            {
-                Changed = false;
-                
-                DrawSignals(dc);
-                DrawGraticule(dc);
-            }
+            
+            DrawSignals(dc);
+            DrawGraticule(dc);
         }
 
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
             base.OnRenderSizeChanged(sizeInfo);
-            Changed = true;
-            this.InvalidateVisual();
+            UpdateScrollBar();
         }
     }
 }
