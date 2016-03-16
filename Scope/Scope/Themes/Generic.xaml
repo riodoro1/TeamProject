@@ -3,7 +3,5 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Scope.Controls">
 
-    <Style TargetType="{x:Type controls:SignalDisplay}">
-        
-    </Style>
+    
 </ResourceDictionary>

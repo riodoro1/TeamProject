@@ -20,7 +20,7 @@ namespace Scope.Controls
     {
         #region Properties
         private bool Changed = true;
-        private List<Signal> Signals;
+        public List<Signal> Signals { get; private set; }
 
         private int majorVerticalDivisions = 8;
         private int majorHorizontalDivisions

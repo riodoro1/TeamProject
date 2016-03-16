@@ -7,15 +7,34 @@
         xmlns:controls="clr-namespace:Scope.Controls"
         mc:Ignorable="d"
         Title="MainWindow" Height="300" Width="500" MinHeight="200" MinWidth="200">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes\ScrollBarStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <controls:SignalDisplay Grid.Row="0" x:Name="SignalDisplay" />
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Button Click="Button_Click">Generate trace 1</Button>
-            <Button Click="Button2_Click">Generate trace 2</Button>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        
+        <controls:SignalDisplay Grid.Row="0" Grid.Column="0" x:Name="SignalDisplay" />
+
+        <controls:SignalScrollBar Grid.Row="1" Orientation="Horizontal" Height="20" />
+
+        <StackPanel Grid.Row="2" Grid.Column="0" Margin="5,0" Orientation="Horizontal">
+            <Button Margin="5,0" Click="Button_Click">Generate trace 1</Button>
+            <Button Margin="5,0" Click="Button2_Click">Generate trace 2</Button>
         </StackPanel>
+
     </Grid>
 </Window>
