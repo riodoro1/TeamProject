@@ -34,7 +34,7 @@ namespace Scope.Controls
             }
         } //depending on width to height ratio
 
-        public Double timePerDivision { get; set; } = 1.0d; //horizontal
+        public Double timePerDivision { get; set; } = 0.1d; //horizontal
         public Double unitsPerDivision { get; set; } = 1.0d; //vertical
 
         public Double StartTime { get; set; } = 0.0d;
@@ -190,11 +190,18 @@ namespace Scope.Controls
             }
         }
 
+        private Point TransformPoint(Point point)
+        {
+            double x = ((point.X - StartTime) * ActualWidth) / (EndTime - StartTime);
+            double y = (ActualHeight / 2) - (point.Y * ActualHeight / majorVerticalDivisions);
+            return new Point(x, y);
+        }
+
         private void DrawSignals(DrawingContext dc)
         {
             if (Signals.Count == 0)
                 return;
-
+            
             foreach (Signal signal in Signals)
             {
                 if (!signal.Visible)
@@ -204,18 +211,19 @@ namespace Scope.Controls
                 if (startIndex == -1)
                     continue;   //signal does not occupy the screen
 
+                PathGeometry path = new PathGeometry();
+                PathFigure figure = new PathFigure();
                 Brush signalBrush = new SolidColorBrush(signal.Color);
 
-                for (int i = startIndex; i < signal.Points.Length && signal.Points[i].X < EndTime; i++)
+                figure.StartPoint = TransformPoint(signal.Points[startIndex]);
+
+                for (int i = startIndex + 1; i < signal.Points.Length && signal.Points[i].X < EndTime; i++)
                 {
-                    double time = signal.Points[i].X;
-                    double value = signal.Points[i].Y;
-
-                    double x = ((time - StartTime) * ActualWidth) / (EndTime - StartTime);
-                    double y = (ActualHeight / 2) - (value * ActualHeight/majorVerticalDivisions);
-
-                    dc.DrawRectangle(signalBrush, null, new Rect(x, y, 1, 1));
+                    figure.Segments.Add(new LineSegment(TransformPoint(signal.Points[i]), true));
                 }
+
+                path.Figures.Add(figure);
+                dc.DrawGeometry(null, new Pen(signalBrush, 1), path);
             }
         }
 

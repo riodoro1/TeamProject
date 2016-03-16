@@ -27,11 +27,11 @@ namespace Scope
 
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
-            Point[] points = new Point[1801];
+            Point[] points = new Point[3601];
 
-            for (int x = 0; x <= 1800; x++)
+            for (int x = 0; x <= 3600; x++)
             {
-                points[x] = new Point(((double)x) / 50.0, (Math.Sin((double)x * (4 * Math.PI / 1800.0)) * 2.0));
+                points[x] = new Point(((double)x) / 1800, (Math.Sin((double)x * (4 * Math.PI / 1800.0)) * 2.0));
             }
 
             Signal signal = new TimeDomainSignal(points, Colors.Red);
