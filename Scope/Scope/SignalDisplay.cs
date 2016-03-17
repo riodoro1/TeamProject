@@ -21,6 +21,17 @@ namespace Scope.Controls
     {
         #region Properties
         public List<Signal> Signals { get; private set; }
+        public SignalScrollBar ScrollBar
+        {
+            get
+            {
+                return (SignalScrollBar)GetValue(ScrollBarProperty);
+            }
+            set
+            {
+                SetValue(ScrollBarProperty, value);
+            }
+        }
 
         private int majorVerticalDivisions = 8;
         private int majorHorizontalDivisions
@@ -34,7 +45,7 @@ namespace Scope.Controls
             }
         } //depending on width to height ratio
 
-        public Double timePerDivision { get; set; } = 0.1d; //horizontal
+        public Double timePerDivision { get; set; } = 1.0d; //horizontal
         public Double unitsPerDivision { get; set; } = 1.0d; //vertical
 
         public Double StartTime { get; set; } = 0.0d;
@@ -76,21 +87,11 @@ namespace Scope.Controls
         #endregion
 
         #region Dependency properties
+        public static readonly DependencyProperty SignalsProperty = DependencyProperty.Register("Signals", typeof(List<Signal>), typeof(SignalDisplay), new UIPropertyMetadata(null));
         public static readonly DependencyProperty ScrollBarProperty = DependencyProperty.Register("ScrollBar", typeof(SignalScrollBar), typeof(SignalDisplay), new UIPropertyMetadata(null));
-        public SignalScrollBar ScrollBar
-        {
-            set
-            {
-                SetValue(ScrollBarProperty, value);
-            }
-            get
-            {
-                return (SignalScrollBar)GetValue(ScrollBarProperty);
-            }
-        }
         #endregion
 
-        #region Supporting methods
+        #region External connection methods
         private void UpdateScrollBar()
         {
             if (ScrollBar == null)
@@ -120,6 +121,7 @@ namespace Scope.Controls
         }
         #endregion
 
+        #region Constructors
         static SignalDisplay()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(SignalDisplay), new FrameworkPropertyMetadata(typeof(SignalDisplay)));
@@ -129,7 +131,9 @@ namespace Scope.Controls
         {
             Signals = new List<Signal>();
         }
+        #endregion
 
+        #region Data manipulation methods
         public void AddSignal(Signal signal)
         {
             Signals.Add(signal);
@@ -154,7 +158,9 @@ namespace Scope.Controls
             UpdateScrollBar();
             this.InvalidateVisual();
         }
+        #endregion
 
+        #region Drawing methods
         private void DrawGraticule(DrawingContext dc)
         {
             double centerY = ActualHeight / 2.0;
@@ -162,10 +168,10 @@ namespace Scope.Controls
             double deltaY = ActualHeight / majorVerticalDivisions / 5.0;   //5 minor divisions
             double deltaX = ActualWidth / majorHorizontalDivisions / 5.0;   //5 minor divisions
 
-            Pen graticulePen = new Pen(new SolidColorBrush(GraticuleColor), 0.4);
+            Pen graticulePen = new Pen(new SolidColorBrush(GraticuleColor), 0.5);
 
             double x = 0.0;
-            while (x <= ActualWidth)
+            while (x <= ActualWidth + 1)
             {
                 dc.DrawLine(graticulePen, new Point(x, 0.0), new Point(x, ActualHeight));
                 x += deltaX;
@@ -178,7 +184,7 @@ namespace Scope.Controls
             }
 
             double y = 0.0;
-            while (y <= ActualHeight)
+            while (y <= ActualHeight + 1)
             {
                 dc.DrawLine(graticulePen, new Point(0.0, y), new Point(ActualWidth, y));
                 y += deltaY;
@@ -208,19 +214,46 @@ namespace Scope.Controls
                     continue;
 
                 int startIndex = signal.StartIndexInsideInterval(StartTime, EndTime);
-                if (startIndex == -1)
-                    continue;   //signal does not occupy the screen
+
+                if (startIndex == -1) //signal does not occupy the screen
+                    continue;   
 
                 PathGeometry path = new PathGeometry();
                 PathFigure figure = new PathFigure();
                 Brush signalBrush = new SolidColorBrush(signal.Color);
 
-                figure.StartPoint = TransformPoint(signal.Points[startIndex]);
+                Point startingPoint = TransformPoint(signal.Points[startIndex]);
 
-                for (int i = startIndex + 1; i < signal.Points.Length && signal.Points[i].X < EndTime; i++)
+                if (startIndex > 0 && startingPoint.X > 1) //first point is too far away from left edge
                 {
+                    Point a = TransformPoint(signal.Points[startIndex - 1]);
+                    Point b = TransformPoint(signal.Points[startIndex]);
+
+                    Double alpha = -a.X / (b.X - a.X);
+                    startingPoint = new Point(0.0, (1-alpha) * a.Y + alpha * b.Y);    //linear interpolation of Y 
+                } 
+
+                figure.StartPoint = startingPoint;
+                
+                for (int i = startIndex + 1; i < signal.Points.Length; i++)
+                {
+                    if (signal.Points[i].X > EndTime)
+                    {
+                        Point lastPoint = TransformPoint(signal.Points[i - 1]);
+                        if (lastPoint.X < ActualWidth - 1)  //last point is too far away from right edge
+                        {
+                            Point a = lastPoint;
+                            Point b = TransformPoint(signal.Points[i]);
+
+                            Double alpha = (ActualWidth - a.X) / (b.X - a.X);
+                            lastPoint = new Point(ActualWidth, (1 - alpha) * a.Y + alpha * b.Y);    //linear interpolation of Y 
+                            figure.Segments.Add(new LineSegment(lastPoint, true));
+                        }
+                        break;
+                    }
                     figure.Segments.Add(new LineSegment(TransformPoint(signal.Points[i]), true));
                 }
+                
 
                 path.Figures.Add(figure);
                 dc.DrawGeometry(null, new Pen(signalBrush, 1), path);
@@ -240,5 +273,6 @@ namespace Scope.Controls
             base.OnRenderSizeChanged(sizeInfo);
             UpdateScrollBar();
         }
+        #endregion
     }
 }

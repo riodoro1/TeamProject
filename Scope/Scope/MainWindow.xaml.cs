@@ -31,7 +31,7 @@ namespace Scope
 
             for (int x = 0; x <= 3600; x++)
             {
-                points[x] = new Point(((double)x) / 1800, (Math.Sin((double)x * (4 * Math.PI / 1800.0)) * 2.0));
+                points[x] = new Point(((double)x) / 18, (Math.Sin((double)x * (4 * Math.PI / 1800.0)) * 2.0));
             }
 
             Signal signal = new TimeDomainSignal(points, Colors.Red);
@@ -45,7 +45,7 @@ namespace Scope
 
             for (int x = 0; x <= 500; x++)
             {
-                points[x] = new Point(((double)x) / 50.0 - 5.0, (Math.Cos((double)x * (2 * Math.PI / 500.0)) * 4.0));
+                points[x] = new Point(((double)x) / 5.0 - 5.0, (Math.Cos((double)x * (2 * Math.PI / 500.0)) * 4.0));
             }
 
             Signal signal = new TimeDomainSignal(points, Colors.Green);

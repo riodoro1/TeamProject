@@ -57,7 +57,7 @@ namespace Scope
             //TODO: more optimal solution assuming the Points array is sorted. (binary search maybe?)
             for (int i = 0; i < Points.Length; i++)
             {
-                if (Points[i].X > start && Points[i].X < end)
+                if (Points[i].X >= start && Points[i].X <= end)
                     return i;
             }
             return -1;
