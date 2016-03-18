@@ -28,13 +28,23 @@
         </Grid.ColumnDefinitions>
 
         <controls:SignalScrollBar x:Name="SignalScrollBar"
-                                  Minimum="0"
-                                  Maximum="0"
                                   Grid.Row="1" 
                                   Orientation="Horizontal" 
                                   Height="20" />
 
-        <controls:SignalDisplay  Margin="5,5,5,5" x:Name="SignalDisplay" Grid.Row="0" Grid.Column="0" ScrollBar="{Binding ElementName=SignalScrollBar}" />
+        <ListBox x:Name="SignalsListBox"
+                 Grid.Row="0"
+                 Grid.Column="1"
+                 Width="150"
+                 ItemsSource="{Binding Signals, ElementName=SignalDisplay}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <controls:SignalDisplay  Margin="5,5,5,5" x:Name="SignalDisplay" Grid.Row="0" Grid.Column="0" ScrollBar="{Binding ElementName=SignalScrollBar}" SignalsListBox="{Binding ElementName=SignalsListBox}" />
 
         <StackPanel Grid.Row="2" Grid.Column="0" Margin="5,0" Orientation="Horizontal">
             <Button Name="Button1" Margin="5,0" Click="Button1_Click">Generate trace 1</Button>

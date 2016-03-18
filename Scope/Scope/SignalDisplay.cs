@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -19,8 +20,9 @@ namespace Scope.Controls
 {
     public class SignalDisplay : Canvas
     {
+
         #region Properties
-        public List<Signal> Signals { get; private set; }
+        public ObservableCollection<Signal> Signals { get; private set; }
         public SignalScrollBar ScrollBar
         {
             get
@@ -30,6 +32,17 @@ namespace Scope.Controls
             set
             {
                 SetValue(ScrollBarProperty, value);
+            }
+        }
+        public ListBox SignalsListBox
+        {
+            get
+            {
+                return (ListBox)GetValue(SignalsListBoxProperty);
+            }
+            set
+            {
+                SetValue(SignalsListBoxProperty, value);
             }
         }
 
@@ -87,7 +100,7 @@ namespace Scope.Controls
         #endregion
 
         #region Dependency properties
-        public static readonly DependencyProperty SignalsProperty = DependencyProperty.Register("Signals", typeof(List<Signal>), typeof(SignalDisplay), new UIPropertyMetadata(null));
+        public static readonly DependencyProperty SignalsListBoxProperty = DependencyProperty.Register("SignalsListBox", typeof(ListBox), typeof(SignalDisplay), new UIPropertyMetadata(null));
         public static readonly DependencyProperty ScrollBarProperty = DependencyProperty.Register("ScrollBar", typeof(SignalScrollBar), typeof(SignalDisplay), new UIPropertyMetadata(null));
         #endregion
 
@@ -129,7 +142,7 @@ namespace Scope.Controls
 
         public SignalDisplay()
         {
-            Signals = new List<Signal>();
+            Signals = new ObservableCollection<Signal>();
         }
         #endregion
 
@@ -171,7 +184,7 @@ namespace Scope.Controls
             Pen graticulePen = new Pen(new SolidColorBrush(GraticuleColor), 0.5);
 
             double x = 0.0;
-            while (x <= ActualWidth + 1)
+            while (x <= ActualWidth + 1) //+1 because the grid was not always drawn.
             {
                 dc.DrawLine(graticulePen, new Point(x, 0.0), new Point(x, ActualHeight));
                 x += deltaX;
@@ -184,7 +197,7 @@ namespace Scope.Controls
             }
 
             double y = 0.0;
-            while (y <= ActualHeight + 1)
+            while (y <= ActualHeight + 1) //+1 because the grid was not always drawn.
             {
                 dc.DrawLine(graticulePen, new Point(0.0, y), new Point(ActualWidth, y));
                 y += deltaY;

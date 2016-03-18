@@ -34,7 +34,7 @@ namespace Scope
                 points[x] = new Point(((double)x) / 18, (Math.Sin((double)x * (4 * Math.PI / 1800.0)) * 2.0));
             }
 
-            Signal signal = new TimeDomainSignal(points, Colors.Red);
+            Signal signal = new TimeDomainSignal(points, Colors.Red, "Signal 1");
             SignalDisplay.AddSignal(signal);
             ((Button)sender).IsEnabled = false;
         }
@@ -48,7 +48,7 @@ namespace Scope
                 points[x] = new Point(((double)x) / 5.0 - 5.0, (Math.Cos((double)x * (2 * Math.PI / 500.0)) * 4.0));
             }
 
-            Signal signal = new TimeDomainSignal(points, Colors.Green);
+            Signal signal = new TimeDomainSignal(points, Colors.Green, "Signal 2");
             SignalDisplay.AddSignal(signal);
             ((Button)sender).IsEnabled = false;
         }
