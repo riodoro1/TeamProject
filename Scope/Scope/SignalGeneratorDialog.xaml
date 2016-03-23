@@ -1,0 +1,58 @@
+﻿<Window x:Class="Scope.SignalGeneratorDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Scope"
+        mc:Ignorable="d"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        Title="Add signal" Height="250.41" Width="284.445" ResizeMode="NoResize">
+    <Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="40" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="26"/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Content="Name:" />
+            <TextBox Grid.Row="0" Grid.Column="1" x:Name="nameTextBox" Text="Unnamed signal" Height="20" TextAlignment="Left"/>
+
+            <Label Grid.Row="1" Grid.Column="0" Content="Color:" />
+            <xctk:ColorPicker Grid.Row="1" Grid.Column="1" x:Name="colorColorPicker" SelectedColor="Blue" Height="22"/>
+
+            <Label Grid.Row="2" Grid.Column="0" Content="Frequency:" />
+            <TextBox Grid.Row="2" Grid.Column="1" x:Name="frequencyTextBox" PreviewTextInput="TextBoxValidateDouble" Text="50" Height="20" TextAlignment="Right"/>
+            <Label Grid.Row="2" Grid.Column="2" Content="Hz" />
+
+            <Label Grid.Row="3" Grid.Column="0" Content="Amplitude:" HorizontalAlignment="Left"/>
+            <TextBox Grid.Row="3" Grid.Column="1" x:Name="amplitudeTextBox" PreviewTextInput="TextBoxValidateDouble" Text="4" Height="20" TextAlignment="Right"/>
+            <Label Grid.Row="3" Grid.Column="2" Content="div" />
+
+            <Label Grid.Row="4" Grid.Column="0" Content="DC offset:" HorizontalAlignment="Left"/>
+            <TextBox Grid.Row="4" Grid.Column="1" x:Name="dcOffsetTextBox" PreviewTextInput="TextBoxValidateDouble" Text="0" Height="20" TextAlignment="Right"/>
+            <Label Grid.Row="4" Grid.Column="2" Content="div" />
+
+            <Label Grid.Row="5" Grid.Column="0" Content="Start time:" HorizontalAlignment="Left"/>
+            <TextBox Grid.Row="5" Grid.Column="1" x:Name="startTimeTextBox" PreviewTextInput="TextBoxValidateDouble" Text="0" Height="20" TextAlignment="Right"/>
+            <Label Grid.Row="5" Grid.Column="2" Content="ms" />
+
+            <Label Grid.Row="6" Grid.Column="0" Content="Duration:" HorizontalAlignment="Left"/>
+            <TextBox Grid.Row="6" Grid.Column="1" x:Name="durationTextBox" PreviewTextInput="TextBoxValidateDouble" Text="1000" Height="20" TextAlignment="Right"/>
+            <Label Grid.Row="6" Grid.Column="2" Content="ms" />
+        </Grid>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Button x:Name="addButton" Content="Add" Width="60" Margin="2,2,2,2" Click="addButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

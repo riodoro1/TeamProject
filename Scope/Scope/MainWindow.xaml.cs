@@ -25,39 +25,13 @@ namespace Scope
             InitializeComponent();
         }
 
-        private void Button1_Click(object sender, RoutedEventArgs e)
+        private void addButton_Click(object sender, RoutedEventArgs e)
         {
-            Point[] points = new Point[3601];
-
-            for (int x = 0; x <= 3600; x++)
+            SignalGeneratorDialog dialog = new SignalGeneratorDialog();
+            if(dialog.ShowDialog() == true)
             {
-                points[x] = new Point(((double)x) / 18, (Math.Sin((double)x * (4 * Math.PI / 1800.0)) * 2.0));
+                SignalDisplay.AddSignal(dialog.Signal);
             }
-
-            Signal signal = new TimeDomainSignal(points, Colors.Red, "Signal 1");
-            SignalDisplay.AddSignal(signal);
-            ((Button)sender).IsEnabled = false;
-        }
-
-        private void Button2_Click(object sender, RoutedEventArgs e)
-        {
-            Point[] points = new Point[501];
-
-            for (int x = 0; x <= 500; x++)
-            {
-                points[x] = new Point(((double)x) / 5.0 - 5.0, (Math.Cos((double)x * (2 * Math.PI / 500.0)) * 4.0));
-            }
-
-            Signal signal = new TimeDomainSignal(points, Colors.Green, "Signal 2");
-            SignalDisplay.AddSignal(signal);
-            ((Button)sender).IsEnabled = false;
-        }
-
-        private void Button3_Click(object sender, RoutedEventArgs e)
-        {
-            SignalDisplay.ClearSignals();
-            Button1.IsEnabled = true;
-            Button2.IsEnabled = true;
         }
     }
 }

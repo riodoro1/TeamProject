@@ -20,7 +20,6 @@ namespace Scope.Controls
 {
     public class SignalDisplay : Canvas
     {
-
         #region Properties
         public ObservableCollection<Signal> Signals { get; private set; }
         public SignalScrollBar ScrollBar

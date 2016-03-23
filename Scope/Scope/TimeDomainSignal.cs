@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 namespace Scope
 {
-    class TimeDomainSignal : Signal
+    public class TimeDomainSignal : Signal
     {
         public override string HorizontalUnit
         {
@@ -27,6 +27,9 @@ namespace Scope
         { }
 
         public TimeDomainSignal(Point[] points, Color color) : this(points, color, "Unnamed signal", "V")
+        { }
+
+        public TimeDomainSignal(Point[] points) : this(points, Colors.Blue)
         { }
     }
 }

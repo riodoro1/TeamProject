@@ -27,7 +27,17 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
+        <controls:SignalDisplay  x:Name="SignalDisplay" 
+                                 Margin="5,5,5,5"  
+                                 Grid.Row="0" 
+                                 Grid.Column="0" 
+                                 ScrollBar="{Binding ElementName=SignalScrollBar}" 
+                                 SignalsListBox="{Binding ElementName=SignalsListBox}" />
+        
         <controls:SignalScrollBar x:Name="SignalScrollBar"
+                                  Margin="5,0,5,5"
+                                  Minimum="0"
+                                  Maximum="0"
                                   Grid.Row="1" 
                                   Orientation="Horizontal" 
                                   Height="20" />
@@ -36,21 +46,15 @@
                  Grid.Row="0"
                  Grid.Column="1"
                  Width="150"
-                 ItemsSource="{Binding Signals, ElementName=SignalDisplay}">
+                 ItemsSource="{Binding Signals, ElementName=SignalDisplay}"
+                 Margin="5,5,5,5">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Name}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-
-        <controls:SignalDisplay  Margin="5,5,5,5" x:Name="SignalDisplay" Grid.Row="0" Grid.Column="0" ScrollBar="{Binding ElementName=SignalScrollBar}" SignalsListBox="{Binding ElementName=SignalsListBox}" />
-
-        <StackPanel Grid.Row="2" Grid.Column="0" Margin="5,0" Orientation="Horizontal">
-            <Button Name="Button1" Margin="5,0" Click="Button1_Click">Generate trace 1</Button>
-            <Button Name="Button2" Margin="5,0" Click="Button2_Click">Generate trace 2</Button>
-            <Button Name="Button3" Margin="5,0" Click="Button3_Click">Remove traces</Button>
-        </StackPanel>
-
+        
+        <Button Grid.Row="1" Grid.Column="1" x:Name="addButton" Margin="5,0,5,5" Content="Add signal" Click="addButton_Click"/>
     </Grid>
 </Window>
