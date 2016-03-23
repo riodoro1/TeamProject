@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Scope"
         xmlns:controls="clr-namespace:Scope.Controls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="300" Width="500" MinHeight="200" MinWidth="200">
+        Title="MainWindow" Height="408.5" Width="561" MinHeight="200" MinWidth="200">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -15,7 +15,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -33,7 +33,7 @@
                                  Grid.Column="0" 
                                  ScrollBar="{Binding ElementName=SignalScrollBar}" 
                                  SignalsListBox="{Binding ElementName=SignalsListBox}" />
-        
+
         <controls:SignalScrollBar x:Name="SignalScrollBar"
                                   Margin="5,0,5,5"
                                   Minimum="0"
@@ -45,7 +45,7 @@
         <ListBox x:Name="SignalsListBox"
                  Grid.Row="0"
                  Grid.Column="1"
-                 Width="150"
+                 Width="120"
                  ItemsSource="{Binding Signals, ElementName=SignalDisplay}"
                  Margin="5,5,5,5">
             <ListBox.ItemTemplate>
@@ -54,7 +54,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        
+
         <Button Grid.Row="1" Grid.Column="1" x:Name="addButton" Margin="5,0,5,5" Content="Add signal" Click="addButton_Click"/>
     </Grid>
 </Window>

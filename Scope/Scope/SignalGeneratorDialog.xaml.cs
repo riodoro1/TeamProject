@@ -48,6 +48,10 @@ namespace Scope
             if(!Double.TryParse(amplitudeTextBox.Text, out amplitude) || amplitude <= 0)
                 parseResult = false;
 
+            Double dutyCycle;
+            if (!Double.TryParse(dutyCycleTextBox.Text, out dutyCycle) || dutyCycle <= 0 || dutyCycle > 1.0)
+                parseResult = false;
+
             Double dcOffset;
             if(!Double.TryParse(dcOffsetTextBox.Text, out dcOffset))
                 parseResult = false;
@@ -60,7 +64,12 @@ namespace Scope
             if(!Double.TryParse(durationTextBox.Text, out duration))
                 parseResult = false;
 
-            SignalGenerator generator = new SineWaveGenerator(frequency, amplitude, dcOffset);
+            SignalGenerator generator;
+
+            if (squareRadioButton.IsChecked.Value)
+                generator = new SquareWaveGenerator(frequency, amplitude, dcOffset, dutyCycle);
+            else
+                generator = new SineWaveGenerator(frequency, amplitude, dcOffset, dutyCycle);
 
             Signal = generator.GenerateSignal(startTime, duration);
             Signal.Name = name;

@@ -9,7 +9,7 @@ namespace Scope
 {
     public abstract class SignalGenerator
     {
-        public static int samplesPerMicroSecond = 1;
+        public static int numberOfSamples = 10000;
 
         protected double frequency;
         protected double amplitude;
@@ -26,7 +26,20 @@ namespace Scope
 
         protected abstract double f(double time);
 
-        public abstract TimeDomainSignal GenerateSignal(Double startTime, Double duration);
+        public TimeDomainSignal GenerateSignal(Double startTime, Double duration)
+        {
+            Double deltaT = duration / numberOfSamples / 1000.0;
+
+            Point[] signalPoints = new Point[numberOfSamples];
+
+            for (int i = 0; i < numberOfSamples; i++)
+            {
+                Double time = i * deltaT;
+                signalPoints[i] = new Point(time + startTime / 1000.0, f(time));
+            }
+
+            return new TimeDomainSignal(signalPoints);
+        }
     }
 
     public class SineWaveGenerator : SignalGenerator
@@ -38,21 +51,23 @@ namespace Scope
         {
             return amplitude / 2.0 * Math.Sin(time * frequency * Math.PI * 2.0) + dcOffset;
         }
+    }
 
-        public override TimeDomainSignal GenerateSignal(Double startTime, Double duration)
+    public class SquareWaveGenerator : SignalGenerator
+    {
+        public SquareWaveGenerator(double frequency, double amplitude, double dcOffset, double dutyCycle) : base(frequency, amplitude, dcOffset, dutyCycle)
         {
-            int numberOfSamples = 100000;
-            Double deltaT = duration / numberOfSamples / 1000.0;
+            if (dutyCycle < 0.0)
+                dutyCycle = 0.0;
+            else if (dutyCycle > 1.0)
+                dutyCycle = 1.0;
+        }
 
-            Point[] signalPoints = new Point[numberOfSamples];
-
-            for(int i = 0; i<numberOfSamples; i++)
-            {
-                Double time = i * deltaT;
-                signalPoints[i] = new Point(time + startTime / 1000.0, f(time));
-            }
-
-            return new TimeDomainSignal(signalPoints);
+        protected override double f(double time)
+        {
+            double duration = 1.0 / frequency;
+            double durationLow = duration * (1.0 - dutyCycle);
+            return (time % duration <= durationLow) ? 0.0 + dcOffset : amplitude + dcOffset;
         }
     }
 }
