@@ -49,7 +49,7 @@ namespace Scope
                 parseResult = false;
 
             Double dutyCycle;
-            if (!Double.TryParse(dutyCycleTextBox.Text, out dutyCycle) || dutyCycle <= 0 || dutyCycle > 1.0)
+            if (!Double.TryParse(dutyCycleTextBox.Text, out dutyCycle) || dutyCycle <= 0 || dutyCycle > 1.0) // TO DO: localization decimal separation
                 parseResult = false;
 
             Double dcOffset;
@@ -68,6 +68,13 @@ namespace Scope
 
             if (squareRadioButton.IsChecked.Value)
                 generator = new SquareWaveGenerator(frequency, amplitude, dcOffset, dutyCycle);
+
+            else if (sawRadioButton.IsChecked.Value)
+                generator = new SawGenerator(frequency, amplitude, dcOffset, dutyCycle);
+
+            else if (triangleRadioButton.IsChecked.Value)
+                generator = new TriangleGenerator(frequency, amplitude, dcOffset, dutyCycle);
+
             else
                 generator = new SineWaveGenerator(frequency, amplitude, dcOffset, dutyCycle);
 

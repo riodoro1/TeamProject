@@ -70,4 +70,29 @@ namespace Scope
             return (time % duration <= durationLow) ? 0.0 + dcOffset : amplitude + dcOffset;
         }
     }
+
+        public class SawGenerator : SignalGenerator
+        {
+            public SawGenerator(double frequency, double amplitude, double dcOffset, double dutyCycle) : base(frequency, amplitude, dcOffset, dutyCycle)
+            {}
+
+            protected override double f(double time)
+            {
+                double duration = 1.0 / frequency;
+                return (time % duration * amplitude / duration)+dcOffset;
+            }
+        }
+
+    public class TriangleGenerator : SignalGenerator
+    {
+        public TriangleGenerator(double frequency, double amplitude, double dcOffset, double dutyCycle) : base(frequency, amplitude, dcOffset, dutyCycle)
+        { }
+
+        protected override double f(double time)
+        {
+            double duration = 1.0 / frequency;
+            return 2* ((time % duration<=Math.Abs(duration/2))? (time % duration * amplitude / (duration)) + dcOffset : amplitude - (time % duration * amplitude / (duration)) + dcOffset);
+        }
+    }
 }
+ 
