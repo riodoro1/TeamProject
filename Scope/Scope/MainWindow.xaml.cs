@@ -31,6 +31,11 @@ namespace Scope
             if(dialog.ShowDialog() == true)
             {
                 SignalDisplay.AddSignal(dialog.Signal);
+                if ( SignalDisplay.Signals.Count == 1 )
+                {
+                    SignalDisplay.TimeSpan = dialog.Signal.Duration; //if we added the first signal change the signal display to fully show it
+                    SignalDisplay.StartTime = dialog.Signal.FirstXValue;
+                }
             }
         }
     }

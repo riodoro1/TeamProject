@@ -60,6 +60,19 @@ namespace Scope.Controls
         public Double timePerDivision { get; set; } = 1.0d; //horizontal
         public Double unitsPerDivision { get; set; } = 1.0d; //vertical
 
+        public Double TimeSpan {
+            get
+            {
+                return timePerDivision * majorHorizontalDivisions;
+            }
+            set
+            {
+                timePerDivision = value / majorHorizontalDivisions;
+                InvalidateVisual();
+                UpdateScrollBar();
+            }
+        }
+
         public Double StartTime { get; set; } = 0.0d;
         public Double EndTime
         {

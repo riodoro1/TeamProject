@@ -75,6 +75,9 @@ namespace Scope
             else if (triangleRadioButton.IsChecked.Value)
                 generator = new TriangleGenerator(frequency, amplitude, dcOffset, dutyCycle);
 
+            else if (flatRadioButton.IsChecked.Value)
+                generator = new FlatGenerator(frequency, amplitude, dcOffset, dutyCycle);
+
             else
                 generator = new SineWaveGenerator(frequency, amplitude, dcOffset, dutyCycle);
 

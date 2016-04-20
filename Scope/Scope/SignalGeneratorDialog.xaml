@@ -13,6 +13,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="20"/>
@@ -23,6 +24,7 @@
                 <RadioButton Margin="2" Grid.Row="1" Grid.Column="0" x:Name="squareRadioButton" Content="Square" GroupName="WaveForm"/>
                 <RadioButton Margin="2" Grid.Row="0" Grid.Column="1" x:Name="sawRadioButton" Content="Saw" GroupName="WaveForm"/>
                 <RadioButton Margin="2" Grid.Row="1" Grid.Column="1" x:Name="triangleRadioButton" Content="Triangle" GroupName="WaveForm"/>
+                <RadioButton Margin="2" Grid.Row="0" Grid.Column="2" x:Name="flatRadioButton" Content="Flat" GroupName="WaveForm"/>
             </Grid>
 
             <Separator/>

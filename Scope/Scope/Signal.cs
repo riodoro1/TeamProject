@@ -36,6 +36,14 @@ namespace Scope
             }
         }
 
+        public Double Duration
+        {
+            get
+            {
+                return LastXValue - FirstXValue;
+            }
+        }
+
         public Double XStep
         {
             get
