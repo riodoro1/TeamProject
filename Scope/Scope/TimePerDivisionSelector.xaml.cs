@@ -29,17 +29,17 @@ namespace Scope.Controls
                                     1,         2,         5};
         private int currentValue = 0;
 
-        public RoutedPropertyChangedEventHandler<double> ValueChanged;
+        public event RoutedPropertyChangedEventHandler<double> ValueChanged;
 
         public TimePerDivisionSelector()
         {
             InitializeComponent();
-            valueTextBox.Text = new Quantity(values[currentValue], "s/div").ToString();
+            valueTextBlock.Text = new Quantity(values[currentValue], "s/div").ToString();
         }
 
         private void valueChanged()
         {
-            valueTextBox.Text = new Quantity(values[currentValue], "s/div").ToString();
+            valueTextBlock.Text = new Quantity(values[currentValue], "s/div").ToString();
             RoutedPropertyChangedEventArgs<double> args = new RoutedPropertyChangedEventArgs<double>(0.0, values[currentValue]);
             ValueChanged(this, args);
         }

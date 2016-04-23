@@ -20,15 +20,15 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="0.20*"/>
-            <ColumnDefinition Width="0.2*"/>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
 
-        <Border Grid.Column="1" BorderBrush="LightGray"  VerticalAlignment="Center" Height="260" Width="1000" Margin="-1000,0,0,0" BorderThickness="1" CornerRadius="10"/>
+        <Border Grid.Column="1" BorderBrush="LightGray"  VerticalAlignment="Center" Height="180" Width="50" Margin="-50,0,0,0" BorderThickness="1" CornerRadius="10"/>
 
         <Grid Grid.Column="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" MinWidth="140"/>
                 <ColumnDefinition Width="0.4*"/>
             </Grid.ColumnDefinitions>
 
@@ -49,17 +49,11 @@
             </Grid>
 
             <Grid Grid.Column="1" Margin="4,0,0,0">
-                <ListBox x:Name="SignalsListBox" BorderThickness="0" Background="#FFF6F6F6" ItemsSource="{Binding Signals, ElementName=SignalDisplay}">
+                <ListBox x:Name="SignalsListBox" BorderThickness="0" Background="#FFF6F6F6" ItemsSource="{Binding Signals, ElementName=SignalDisplay}" HorizontalContentAlignment="Stretch">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="22"/>
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Text="{Binding Name}"/>
-                                <xctk:ColorPicker Grid.Column="1" Width="22" Height="22" ShowDropDownButton="False" HorizontalAlignment="Right" SelectedColor="{Binding Color}"></xctk:ColorPicker>
+                            <Grid Width="{Binding Width, ElementName=SignalsListBox}">
+                                <controls:SignalListItem Signal="{Binding}"/>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

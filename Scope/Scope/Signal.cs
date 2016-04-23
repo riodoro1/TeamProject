@@ -17,6 +17,7 @@ namespace Scope
         public Boolean Visible { get; set; } = true;
         public virtual String HorizontalUnit { get; }
         public virtual String VerticalUnit { get; protected set; }
+        public Controls.SignalDisplay Display { get; set; } = null;
         #endregion
 
         #region Computed properties
@@ -41,6 +42,23 @@ namespace Scope
             get
             {
                 return LastXValue - FirstXValue;
+            }
+        }
+
+        public Double PeakToPeak
+        {
+            get
+            {
+                double minimum = double.PositiveInfinity;
+                double maximum = double.NegativeInfinity;
+                foreach (Point point in Points)
+                {
+                    if ( point.Y > maximum )
+                        maximum = point.Y;
+                    if (point.Y < minimum)
+                        minimum = point.Y;
+                }
+                return maximum - minimum;
             }
         }
 

@@ -180,7 +180,7 @@ namespace Scope.Controls
             InfoBar.TimePerDivision.Content = (new Quantity(timePerDivision, "s/div")).ToString();
         }
 
-        private void RefreshDisplay()
+        public void RefreshDisplay()
         {
             InvalidateVisual();
             UpdateScrollBar();
@@ -204,6 +204,7 @@ namespace Scope.Controls
         public void AddSignal(Signal signal)
         {
             Signals.Add(signal);
+            signal.Display = this;
             RefreshDisplay();
         }
 

@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="Scope.Controls.SignalListItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Scope"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d"
+             d:DesignHeight="44" d:DesignWidth="300">
+    <UserControl.Resources>
+        <local:DoubleAndStringToQuantityConverter x:Key="doubleAndStringToQuantity"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="22"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+
+        <TextBox x:Name="NameTextBox" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" BorderThickness="0" Background="Transparent" Cursor="Arrow" Text="{Binding Name}" MouseDoubleClick="NameTextBox_MouseDoubleClick" LostFocus="NameTextBox_LostFocus" KeyDown="NameTextBox_KeyDown"/>
+        <xctk:ColorPicker Grid.Row="0" HorizontalAlignment="Right" Width="22" Height="22" ShowDropDownButton="False" ShowAvailableColors="False" SelectedColor="{Binding Color}" SelectedColorChanged="ColorPicker_SelectedColorChanged"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label x:Name="DurationLabelBox" Grid.Column="0" VerticalAlignment="Center" FontFamily="Consolas" FontSize="9">
+                <MultiBinding Converter="{StaticResource doubleAndStringToQuantity}">
+                    <Binding Path="Duration"/>
+                    <Binding Path="HorizontalUnit"/>
+                </MultiBinding>
+            </Label>
+            <Label x:Name="PeakToPeakLabel" Grid.Column="1" VerticalAlignment="Center" FontFamily="Consolas" FontSize="9">
+                <MultiBinding Converter="{StaticResource doubleAndStringToQuantity}" ConverterParameter="p-p">
+                    <Binding Path="PeakToPeak"/>
+                    <Binding Path="VerticalUnit"/>
+                </MultiBinding>
+            </Label>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -89,6 +89,9 @@
       <DependentUpon>SignalGeneratorDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="SignalGenerators.cs" />
+    <Compile Include="SignalListItem.xaml.cs">
+      <DependentUpon>SignalListItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SignalScrollBar.cs" />
     <Compile Include="TimeDomainSignal.cs" />
     <Compile Include="TimePerDivisionSelector.xaml.cs">
@@ -111,6 +114,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SignalGeneratorDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SignalListItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace Scope
 {
-    class Quantity : Object
+    public class Quantity : Object
     {
         private Double value;
         private String unit;
@@ -20,7 +22,7 @@ namespace Scope
             for (; prefixIndex < 8; prefixIndex++)
             {
                 Double valueScaled = value / multipliers[prefixIndex];
-                if ( valueScaled >= 1.0 )
+                if ( valueScaled >= 0.999 ) //1.0 here vould round terribly
                 {
                     break;
                 }
@@ -43,7 +45,28 @@ namespace Scope
         {
             Double scaledValue = value;
             String prefix = SIPrefix(ref scaledValue);
-            return scaledValue.ToString("F1") + " " + prefix + unit;
+            return scaledValue.ToString("F1") + "" + prefix + unit;
         }
     }
+
+    public class DoubleAndStringToQuantityConverter : IMultiValueConverter
+    {
+        public object Convert(object[] value, Type targetType, object parameter, CultureInfo cultureInfo)
+        {
+            double? val = (value[0] as double?);
+            string unit = (value[1] as string);
+            string postfix = (parameter as string);
+
+            if (val.HasValue && unit != null)
+                return (new Quantity(val.Value, unit)).ToString() + (postfix == null? "": postfix);
+            else
+                throw new InvalidCastException("Could not convert from values");
+        }
+
+        public object[] ConvertBack(object value, Type[] targetType, object parameter, CultureInfo cultureInfo)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 }

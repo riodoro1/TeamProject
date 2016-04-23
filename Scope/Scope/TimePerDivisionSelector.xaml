@@ -17,7 +17,7 @@
 
 
         <Border Grid.Column="0" Grid.RowSpan="2" BorderBrush="LightGray" BorderThickness="1" Background="White" Height="30">
-            <TextBox VerticalAlignment="Center" x:Name="valueTextBox" IsEnabled="False" BorderBrush="{x:Null}"/>
+            <TextBlock VerticalAlignment="Center" x:Name="valueTextBlock"/>
         </Border>
 
         <RepeatButton Grid.Row="0" Grid.Column="1" FontSize="8" Click="UpButton_Click">▴</RepeatButton>
