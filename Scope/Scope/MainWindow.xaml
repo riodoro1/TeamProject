@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Scope"
         xmlns:controls="clr-namespace:Scope.Controls"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="408.5" Width="561" MinHeight="200" MinWidth="200">
+        Title="MainWindow" Height="408.5" Width="800" MinHeight="200" MinWidth="200">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -17,53 +18,69 @@
     </Window.Resources>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="0.4*" />
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.20*"/>
+            <ColumnDefinition Width="0.2*"/>
         </Grid.ColumnDefinitions>
 
-        <controls:SignalDisplay  x:Name="SignalDisplay" 
-                                 Margin="5,5,5,5"  
-                                 Grid.Row="0" 
-                                 Grid.Column="0" 
-                                 ScrollBar="{Binding ElementName=SignalScrollBar}" 
-                                 SignalsListBox="{Binding ElementName=SignalsListBox}" 
-                                 Background="White"/>
+        <Border Grid.Column="1" BorderBrush="LightGray"  VerticalAlignment="Center" Height="260" Width="1000" Margin="-1000,0,0,0" BorderThickness="1" CornerRadius="10"/>
 
-        <controls:SignalScrollBar x:Name="SignalScrollBar"
-                                  Margin="5,0,5,5"
-                                  Minimum="0"
-                                  Maximum="0"
-                                  Grid.Row="1" 
-                                  Orientation="Horizontal" 
-                                  Height="20" />
+        <Grid Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.4*"/>
+            </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="0" Grid.Column="1" Margin="0,5,0,5">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="20"/>
+                </Grid.RowDefinitions>
 
-            <ListBox x:Name="SignalsListBox"
-                     Grid.Row="0"
-                     ItemsSource="{Binding Signals, ElementName=SignalDisplay}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}" />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                <controls:SignalDisplayInfoBar Grid.Row="0" x:Name="SignalInfoBar"/>
+                <controls:SignalScrollBar Grid.Row="2" x:Name="SignalScrollBar" Margin="0,0,0,0" Minimum="0" Maximum="0" Orientation="Horizontal" Height="20" />
+                <controls:SignalDisplay  Grid.Row="1" x:Name="SignalDisplay" Background="White"
+                                         ScrollBar="{Binding ElementName=SignalScrollBar}"
+                                         SignalsListBox="{Binding ElementName=SignalsListBox}"
+                                         InfoBar="{Binding ElementName=SignalInfoBar}"
+                                         TimePerDivisionSelector="{Binding ElementName=TimePerDivisionSelector}"/>
+            </Grid>
 
-            <StackPanel Orientation="Horizontal" Grid.Row="1" Height="20">
-                <Button x:Name="AddButton" Background="White" BorderThickness="0.5" Click="addButton_Click" Margin="0,0,20,0">
-                    New
-                </Button>
-            </StackPanel>
+            <Grid Grid.Column="1" Margin="4,0,0,0">
+                <ListBox x:Name="SignalsListBox" BorderThickness="0" Background="#FFF6F6F6" ItemsSource="{Binding Signals, ElementName=SignalDisplay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="22"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="{Binding Name}"/>
+                                <xctk:ColorPicker Grid.Column="1" Width="22" Height="22" ShowDropDownButton="False" HorizontalAlignment="Right" SelectedColor="{Binding Color}"></xctk:ColorPicker>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Width="4" Background="LightGray"/>
+            <Border Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="LightGray" BorderThickness="1" CornerRadius="2"/>
         </Grid>
+
+        <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button Width="50" Margin="0,0,0,10" Click="addButton_Click">Add</Button>
+            <Button Width="50" Margin="0,0,0,10">Import</Button>
+            <Button Width="50" Margin="0,0,0,10">Math</Button>
+        </StackPanel>
+
+        <Rectangle Grid.Column="2" Width="1" Stroke="LightGray" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+
+        <StackPanel Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <controls:TimePerDivisionSelector x:Name="TimePerDivisionSelector" Width="90"/>
+        </StackPanel>
+
     </Grid>
 </Window>

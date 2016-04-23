@@ -33,7 +33,7 @@ namespace Scope
                 SignalDisplay.AddSignal(dialog.Signal);
                 if ( SignalDisplay.Signals.Count == 1 )
                 {
-                    SignalDisplay.TimeSpan = dialog.Signal.Duration; //if we added the first signal change the signal display to fully show it
+                    TimePerDivisionSelector.setNearestValueTo(dialog.Signal.Duration / SignalDisplay.majorHorizontalDivisions); //if we added the first signal change the signal display to fully show it
                     SignalDisplay.StartTime = dialog.Signal.FirstXValue;
                 }
             }

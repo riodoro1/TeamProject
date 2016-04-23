@@ -44,9 +44,31 @@ namespace Scope.Controls
                 SetValue(SignalsListBoxProperty, value);
             }
         }
+        public SignalDisplayInfoBar InfoBar
+        {
+            get
+            {
+                return (SignalDisplayInfoBar)GetValue(InfoBarProperty);
+            }
+            set
+            {
+                SetValue(InfoBarProperty, value);
+            }
+        }
+        public TimePerDivisionSelector TimePerDivisionSelector
+        {
+            get
+            {
+                return (TimePerDivisionSelector)GetValue(TimePerDivSelectorProperty);
+            }
+            set
+            {
+                SetValue(TimePerDivSelectorProperty, value);
+            }
+        }
 
-        private int majorVerticalDivisions = 8;
-        private int majorHorizontalDivisions
+        public int majorVerticalDivisions = 8;
+        public int majorHorizontalDivisions
         {
             get
             {
@@ -68,8 +90,7 @@ namespace Scope.Controls
             set
             {
                 timePerDivision = value / majorHorizontalDivisions;
-                InvalidateVisual();
-                UpdateScrollBar();
+                RefreshDisplay();
             }
         }
 
@@ -113,20 +134,14 @@ namespace Scope.Controls
 
         #region Dependency properties
         public static readonly DependencyProperty SignalsListBoxProperty = DependencyProperty.Register("SignalsListBox", typeof(ListBox), typeof(SignalDisplay), new UIPropertyMetadata(null));
-        public static readonly DependencyProperty ScrollBarProperty = DependencyProperty.Register("ScrollBar", typeof(SignalScrollBar), typeof(SignalDisplay), new UIPropertyMetadata(null));
+        public static readonly DependencyProperty ScrollBarProperty = DependencyProperty.Register("ScrollBar", typeof(SignalScrollBar), typeof(SignalDisplay), new PropertyMetadata(OnScrollBarPropertyChanged));
+        public static readonly DependencyProperty InfoBarProperty = DependencyProperty.Register("InfoBar", typeof(SignalDisplayInfoBar), typeof(SignalDisplay), new UIPropertyMetadata(null));
+        public static readonly DependencyProperty TimePerDivSelectorProperty = DependencyProperty.Register("TimePerDivisionSelector", typeof(TimePerDivisionSelector), typeof(SignalDisplay), new PropertyMetadata(OnTimePerDivSelectorPropertyChanged));
         #endregion
 
         #region External connection methods
         private void UpdateScrollBar()
         {
-            if (ScrollBar == null)
-                return;
-            if (OnScrollBarValueChangedHandler == null)
-            {
-                OnScrollBarValueChangedHandler = new RoutedPropertyChangedEventHandler<double>(OnScrollBarValueChanged);
-                ScrollBar.ValueChanged += OnScrollBarValueChangedHandler;
-            }
-
             Double viewPortSize = EndTime - StartTime;
             Double scrollBarMinimum = MinimumTime;
             Double scrollBarMaximum = Math.Max(MaximumTime, EndTime) - viewPortSize;
@@ -137,12 +152,39 @@ namespace Scope.Controls
             ScrollBar.ViewportSize = viewPortSize;
             ScrollBar.Value = scrollBarValue;
         }
-
-        private RoutedPropertyChangedEventHandler<double> OnScrollBarValueChangedHandler = null;
+        private static void OnScrollBarPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        {
+            SignalDisplay disp = (obj as SignalDisplay);
+            disp.ScrollBar.ValueChanged += new RoutedPropertyChangedEventHandler<double>(disp.OnScrollBarValueChanged);
+        }
         private void OnScrollBarValueChanged(Object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             StartTime = (sender as SignalScrollBar).Value;
-            this.InvalidateVisual();
+            RefreshDisplay();
+        }
+
+        private static void OnTimePerDivSelectorPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        {
+            SignalDisplay disp = (obj as SignalDisplay);
+            disp.TimePerDivisionSelector.ValueChanged += new RoutedPropertyChangedEventHandler<double>(disp.OnTimePerDivisionValueChanged);
+        }
+        private void OnTimePerDivisionValueChanged(Object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            timePerDivision = e.NewValue;
+            RefreshDisplay();
+        }
+  
+        
+        private void UpdateInfoBar()
+        {
+            InfoBar.TimePerDivision.Content = (new Quantity(timePerDivision, "s/div")).ToString();
+        }
+
+        private void RefreshDisplay()
+        {
+            InvalidateVisual();
+            UpdateScrollBar();
+            UpdateInfoBar();
         }
         #endregion
 
@@ -162,8 +204,7 @@ namespace Scope.Controls
         public void AddSignal(Signal signal)
         {
             Signals.Add(signal);
-            UpdateScrollBar();
-            this.InvalidateVisual();
+            RefreshDisplay();
         }
 
         public Boolean RemoveSignal(Signal signal)
@@ -171,8 +212,7 @@ namespace Scope.Controls
             Boolean removed = Signals.Remove(signal);
             if (removed)
             {
-                UpdateScrollBar();
-                this.InvalidateVisual();
+                RefreshDisplay();
             }
             return removed;
         }
@@ -180,8 +220,7 @@ namespace Scope.Controls
         public void ClearSignals()
         {
             Signals.Clear();
-            UpdateScrollBar();
-            this.InvalidateVisual();
+            RefreshDisplay();
         }
         #endregion
 
@@ -291,12 +330,6 @@ namespace Scope.Controls
             
             DrawSignals(dc);
             DrawGraticule(dc);
-        }
-
-        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
-        {
-            base.OnRenderSizeChanged(sizeInfo);
-            UpdateScrollBar();
         }
         #endregion
     }
