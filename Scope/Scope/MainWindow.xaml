@@ -10,6 +10,11 @@
         Title="MainWindow" Height="408.5" Width="800" MinHeight="200" MinWidth="200">
 
     <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes\ScrollBarStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
 
     <Grid>
@@ -35,7 +40,9 @@
                 </Grid.RowDefinitions>
 
                 <controls:SignalDisplayInfoBar Grid.Row="0" x:Name="SignalInfoBar"/>
+
                 <controls:SignalScrollBar Grid.Row="2" x:Name="SignalScrollBar" Margin="0,0,0,0" Minimum="0" Maximum="0" Orientation="Horizontal" Height="20" />
+
                 <controls:SignalDisplay  Grid.Row="1" x:Name="SignalDisplay" Background="White"
                                          ScrollBar="{Binding ElementName=SignalScrollBar}"
                                          SignalsListBox="{Binding ElementName=SignalsListBox}"
