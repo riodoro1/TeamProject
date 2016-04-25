@@ -8,16 +8,25 @@
              mc:Ignorable="d"
              d:DesignHeight="44" d:DesignWidth="300">
     <UserControl.Resources>
-        <local:DoubleAndStringToQuantityConverter x:Key="doubleAndStringToQuantity"/>
+        <ResourceDictionary>
+            <local:DoubleAndStringToQuantityConverter x:Key="doubleAndStringToQuantity"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes\CheckBoxStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="22"/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
-
+ 
         <TextBox x:Name="NameTextBox" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" BorderThickness="0" Background="Transparent" Cursor="Arrow" Text="{Binding Name}" MouseDoubleClick="NameTextBox_MouseDoubleClick" LostFocus="NameTextBox_LostFocus" KeyDown="NameTextBox_KeyDown"/>
-        <xctk:ColorPicker Grid.Row="0" HorizontalAlignment="Right" Width="22" Height="22" ShowDropDownButton="False" ShowAvailableColors="False" SelectedColor="{Binding Color}" SelectedColorChanged="ColorPicker_SelectedColorChanged"/>
+
+        <StackPanel Grid.Row="0" HorizontalAlignment="Right" Orientation="Horizontal">
+            <CheckBox IsChecked="{Binding Visible}" Style="{StaticResource visibilityCheckbox}" Margin="0,0,2,0" Click="CheckBox_Click" />
+            <xctk:ColorPicker Width="22" Height="22" ShowDropDownButton="False" ShowAvailableColors="False" SelectedColor="{Binding Color}" SelectedColorChanged="ColorPicker_SelectedColorChanged"/>
+        </StackPanel>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>

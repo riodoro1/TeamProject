@@ -98,5 +98,18 @@ namespace Scope.Controls
                 SaveName();
             }
         }
+
+        private void CheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkbox = (sender as CheckBox);
+            if (checkbox.IsChecked.HasValue )
+            {
+                Signal.Visible = checkbox.IsChecked.Value;
+                if (Signal.Display != null)
+                {
+                    Signal.Display.RefreshDisplay();
+                }
+            }
+        }
     }
 }

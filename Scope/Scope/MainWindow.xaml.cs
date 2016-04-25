@@ -38,5 +38,14 @@ namespace Scope
                 }
             }
         }
+
+        private void mathButton_Click(object sender, RoutedEventArgs e)
+        {
+            MathDialog dialog = new MathDialog(SignalDisplay.Signals);
+            if (dialog.ShowDialog() == true)
+            {
+                
+            }
+        }
     }
 }

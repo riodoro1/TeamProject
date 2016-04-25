@@ -79,6 +79,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MathDialog.xaml.cs">
+      <DependentUpon>MathDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Quantity.cs" />
     <Compile Include="SignalDisplay.cs" />
     <Compile Include="Signal.cs" />
@@ -97,6 +100,10 @@
     <Compile Include="TimePerDivisionSelector.xaml.cs">
       <DependentUpon>TimePerDivisionSelector.xaml</DependentUpon>
     </Compile>
+    <Page Include="Themes\CheckBoxStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -109,6 +116,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MathDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SignalDisplayInfoBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
