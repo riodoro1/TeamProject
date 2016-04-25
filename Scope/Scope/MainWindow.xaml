@@ -51,7 +51,7 @@
             </Grid>
 
             <Grid Grid.Column="1" Margin="4,0,0,0">
-                <ListBox x:Name="SignalsListBox" BorderThickness="0" Background="#FFF6F6F6" ItemsSource="{Binding Signals, ElementName=SignalDisplay}" HorizontalContentAlignment="Stretch">
+                <ListBox x:Name="SignalsListBox" BorderThickness="0" Background="#FFF6F6F6" ItemsSource="{Binding Signals, ElementName=SignalDisplay}" HorizontalContentAlignment="Stretch" SelectionMode="Single" SelectionChanged="SignalsListBox_SelectionChanged">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid Width="{Binding Width, ElementName=SignalsListBox}">
@@ -68,6 +68,7 @@
 
         <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Button Width="50" Margin="0,0,0,10" Click="addButton_Click">Add</Button>
+            <Button Width="50" Margin="0,0,0,10" x:Name="DeleteButton" IsEnabled="False" Click="deleteButton_Click">Delete</Button>
             <Button Width="50" Margin="0,0,0,10">Import</Button>
             <Button Width="50" Margin="0,0,0,10" Click="mathButton_Click">Math</Button>
         </StackPanel>

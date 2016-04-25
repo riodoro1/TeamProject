@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Scope.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,12 +40,30 @@ namespace Scope
             }
         }
 
+        private void deleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            Signal selectedItem = (SignalsListBox.SelectedItem as Signal);
+            SignalDisplay.RemoveSignal(selectedItem);
+        }
+
         private void mathButton_Click(object sender, RoutedEventArgs e)
         {
             MathDialog dialog = new MathDialog(SignalDisplay.Signals);
             if (dialog.ShowDialog() == true)
             {
                 
+            }
+        }
+
+        private void SignalsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if ( SignalsListBox.SelectedIndex != -1 )
+            {
+                DeleteButton.IsEnabled = true;
+            }
+            else
+            {
+                DeleteButton.IsEnabled = false;
             }
         }
     }
