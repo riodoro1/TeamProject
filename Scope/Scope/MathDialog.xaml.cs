@@ -20,7 +20,7 @@ namespace Scope
     /// </summary>
     public partial class MathDialog : Window
     {
-        public static SignalOperator[] Operators = { new SignalSummator() };
+        public static SignalOperator[] Operators = { new SignalSummator(), new SignalSubtractor(), new SignalMultiplier(), new SignalDivider() };
 
         public Signal Signal = null;
 
@@ -112,9 +112,16 @@ namespace Scope
                 Signal = signalOperator.Result(firstOperand, secondOperand);
             }
 
-            Signal.Name = name;
-            Signal.Color = color;
-            this.DialogResult = true;
+            if (Signal == null)
+            {
+                this.DialogResult = false;
+            }
+            else
+            {
+                Signal.Name = name;
+                Signal.Color = color;
+                this.DialogResult = true;
+            }
         }
     }
 

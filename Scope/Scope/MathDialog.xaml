@@ -25,7 +25,7 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
 
-                <ComboBox x:Name="operatorBox" Width="90" Margin="0,0,10,0" SelectionChanged="operatorBox_SelectionChanged">
+                <ComboBox x:Name="operatorBox" Width="100" Margin="0,0,10,0" SelectionChanged="operatorBox_SelectionChanged">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
