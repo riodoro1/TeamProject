@@ -20,10 +20,101 @@ namespace Scope
     /// </summary>
     public partial class MathDialog : Window
     {
+        public static SignalOperator[] Operators = { new SignalSummator() };
+
+        public Signal Signal = null;
+
         public MathDialog(ObservableCollection<Signal> signals)
         {
             InitializeComponent();
             DataContext = signals;
+
+            operatorBox.ItemsSource = Operators;
+        }
+
+        private void Validate()
+        {
+            if (operatorBox.SelectedItem == null)
+            {
+                addButton.IsEnabled = false;
+                return;
+            }
+
+            SignalOperator signalOperator = (operatorBox.SelectedItem as SignalOperator);
+            if (signalOperator.NumberOfOperands == 1)
+            {
+                if (firstOperandBox.SelectedItem == null)
+                {
+                    addButton.IsEnabled = false;
+                    return;
+                }
+            }
+            else
+            {
+                if (firstOperandBox.SelectedItem == null || secondOperandBox.SelectedItem == null)
+                {
+                    addButton.IsEnabled = false;
+                    return;
+                }
+            }
+
+            addButton.IsEnabled = true;
+        }
+
+        private void operatorBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SignalOperator signalOperator = (operatorBox.SelectedItem as SignalOperator);
+
+            if (signalOperator.NumberOfOperands == 1)
+            { 
+                secondOperandBox.IsEnabled = false;
+                firstOperandBox.IsEnabled = true;
+            }
+            else
+            {
+                secondOperandBox.IsEnabled = true;
+                firstOperandBox.IsEnabled = true;
+            }
+
+            Validate();
+        }
+
+        private void firstOperandBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Validate();
+        }
+
+        private void secondOperandBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Validate();
+        }
+
+        private void addButton_Click(object sender, RoutedEventArgs e)
+        {
+            string name = nameTextBox.Text;
+            Color color = colorColorPicker.SelectedColor.Value;
+            SignalOperator signalOperator = (operatorBox.SelectedItem as SignalOperator);
+
+            if ( firstOperandBox.SelectedItem == null )
+            {
+                this.DialogResult = false;
+            }
+
+            if ( signalOperator.NumberOfOperands == 1 )
+            {
+                Signal firstOperand = (firstOperandBox.SelectedItem as Signal);
+                Signal = signalOperator.Result(firstOperand);
+            }
+            else
+            {
+                Signal firstOperand = (firstOperandBox.SelectedItem as Signal);
+                Signal secondOperand = (secondOperandBox.SelectedItem as Signal);
+                Signal = signalOperator.Result(firstOperand, secondOperand);
+            }
+
+            Signal.Name = name;
+            Signal.Color = color;
+            this.DialogResult = true;
         }
     }
 

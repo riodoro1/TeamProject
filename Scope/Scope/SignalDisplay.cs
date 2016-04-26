@@ -79,10 +79,10 @@ namespace Scope.Controls
             }
         } //depending on width to height ratio
 
-        public Double timePerDivision { get; set; } = 1.0d; //horizontal
-        public Double unitsPerDivision { get; set; } = 1.0d; //vertical
+        public double timePerDivision { get; set; } = 1.0d; //horizontal
+        public double unitsPerDivision { get; set; } = 1.0d; //vertical
 
-        public Double TimeSpan {
+        public double TimeSpan {
             get
             {
                 return timePerDivision * majorHorizontalDivisions;
@@ -94,8 +94,8 @@ namespace Scope.Controls
             }
         }
 
-        public Double StartTime { get; set; } = 0.0d;
-        public Double EndTime
+        public double StartTime { get; set; } = 0.0d;
+        public double EndTime
         {
             get
             {
@@ -104,11 +104,11 @@ namespace Scope.Controls
         }
         public Color GraticuleColor { get; set; } = Colors.Gray;
 
-        public Double MinimumTime
+        public double MinimumTime
         {
             get
             {
-                Double minimum = 0;
+                double minimum = 0;
                 foreach (Signal signal in Signals)
                 {
                     if (signal.FirstXValue < minimum)
@@ -117,11 +117,11 @@ namespace Scope.Controls
                 return minimum;
             }
         }
-        public Double MaximumTime
+        public double MaximumTime
         {
             get
             {
-                Double maximum = 0;
+                double maximum = 0;
                 foreach (Signal signal in Signals)
                 {
                     if (signal.LastXValue > maximum)
@@ -142,10 +142,10 @@ namespace Scope.Controls
         #region External connection methods
         private void UpdateScrollBar()
         {
-            Double viewPortSize = EndTime - StartTime;
-            Double scrollBarMinimum = MinimumTime;
-            Double scrollBarMaximum = Math.Max(MaximumTime, EndTime) - viewPortSize;
-            Double scrollBarValue = StartTime;
+            double viewPortSize = EndTime - StartTime;
+            double scrollBarMinimum = MinimumTime;
+            double scrollBarMaximum = Math.Max(MaximumTime, EndTime) - viewPortSize;
+            double scrollBarValue = StartTime;
 
             ScrollBar.Minimum = scrollBarMinimum;
             ScrollBar.Maximum = scrollBarMaximum;
@@ -157,7 +157,7 @@ namespace Scope.Controls
             SignalDisplay disp = (obj as SignalDisplay);
             disp.ScrollBar.ValueChanged += new RoutedPropertyChangedEventHandler<double>(disp.OnScrollBarValueChanged);
         }
-        private void OnScrollBarValueChanged(Object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void OnScrollBarValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             StartTime = (sender as SignalScrollBar).Value;
             RefreshDisplay();
@@ -168,7 +168,7 @@ namespace Scope.Controls
             SignalDisplay disp = (obj as SignalDisplay);
             disp.TimePerDivisionSelector.ValueChanged += new RoutedPropertyChangedEventHandler<double>(disp.OnTimePerDivisionValueChanged);
         }
-        private void OnTimePerDivisionValueChanged(Object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void OnTimePerDivisionValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             timePerDivision = e.NewValue;
             RefreshDisplay();
@@ -265,6 +265,12 @@ namespace Scope.Controls
         {
             double x = ((point.X - StartTime) * ActualWidth) / (EndTime - StartTime);
             double y = (ActualHeight / 2) - (point.Y * ActualHeight / majorVerticalDivisions);
+
+            if (y > ActualHeight)
+                y = ActualHeight;
+            else if (y < 0)
+                y = 0;
+
             return new Point(x, y);
         }
 
@@ -291,15 +297,12 @@ namespace Scope.Controls
 
                 if (startIndex > 0 && startingPoint.X > 1) //first point is too far away from left edge
                 {
-                    Point a = TransformPoint(signal.Points[startIndex - 1]);
-                    Point b = TransformPoint(signal.Points[startIndex]);
-
-                    Double alpha = -a.X / (b.X - a.X);
-                    startingPoint = new Point(0.0, (1-alpha) * a.Y + alpha * b.Y);    //linear interpolation of Y 
+                    startingPoint = TransformPoint(new Point(StartTime, signal.InterpolatedValueForX(StartTime).Value));
                 } 
 
                 figure.StartPoint = startingPoint;
-                
+
+                double lastDrawnX = -1.0;
                 for (int i = startIndex + 1; i < signal.Points.Length; i++)
                 {
                     if (signal.Points[i].X > EndTime)
@@ -307,16 +310,20 @@ namespace Scope.Controls
                         Point lastPoint = TransformPoint(signal.Points[i - 1]);
                         if (lastPoint.X < ActualWidth - 1)  //last point is too far away from right edge
                         {
-                            Point a = lastPoint;
-                            Point b = TransformPoint(signal.Points[i]);
-
-                            Double alpha = (ActualWidth - a.X) / (b.X - a.X);
-                            lastPoint = new Point(ActualWidth, (1 - alpha) * a.Y + alpha * b.Y);    //linear interpolation of Y 
+                            lastPoint = TransformPoint(new Point(EndTime, signal.InterpolatedValueForX(EndTime).Value));
                             figure.Segments.Add(new LineSegment(lastPoint, true));
                         }
                         break;
                     }
-                    figure.Segments.Add(new LineSegment(TransformPoint(signal.Points[i]), true));
+
+                    Point point = TransformPoint(signal.Points[i]);
+                    if ( point.X - lastDrawnX < 0.5 )
+                    {
+                        continue;   //do not draw a point if it is very close to the predecessor
+                    }
+
+                    lastDrawnX = point.X;
+                    figure.Segments.Add(new LineSegment(point, true));
                 }
                 
 

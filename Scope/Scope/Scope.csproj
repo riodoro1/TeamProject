@@ -95,6 +95,7 @@
     <Compile Include="SignalListItem.xaml.cs">
       <DependentUpon>SignalListItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SignalOperators.cs" />
     <Compile Include="SignalScrollBar.cs" />
     <Compile Include="TimeDomainSignal.cs" />
     <Compile Include="TimePerDivisionSelector.xaml.cs">

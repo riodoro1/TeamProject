@@ -6,21 +6,68 @@
         xmlns:local="clr-namespace:Scope"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="MathWindow" Height="300" Width="300">
+        Title="Math" Height="160" Width="400" ResizeMode="NoResize">
     <Window.Resources>
         <local:ColorToSolidColorBrushValueConverter x:Key="colorConverter"/>
     </Window.Resources>
     <Grid>
-        <ComboBox x:Name="comboBox" HorizontalAlignment="Left" ItemsSource="{Binding}" VerticalAlignment="Top" Width="120">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Rectangle Fill="{Binding Color, Converter={StaticResource colorConverter}}" Width="12" Height="12" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                        <TextBlock Text="{Binding Name}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
+        <StackPanel>
 
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,5">
+                <ComboBox x:Name="firstOperandBox" HorizontalAlignment="Left" ItemsSource="{Binding}" IsEnabled="False"  VerticalAlignment="Top" Width="130" Margin="0,0,10,0" SelectionChanged="firstOperandBox_SelectionChanged">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Rectangle Fill="{Binding Color, Converter={StaticResource colorConverter}}" Width="12" Height="12" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                <TextBlock Text="{Binding Name}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <ComboBox x:Name="operatorBox" Width="90" Margin="0,0,10,0" SelectionChanged="operatorBox_SelectionChanged">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Name}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <ComboBox x:Name="secondOperandBox" HorizontalAlignment="Left" ItemsSource="{Binding}" IsEnabled="False" VerticalAlignment="Top" Width="130" SelectionChanged="secondOperandBox_SelectionChanged">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Rectangle Fill="{Binding Color, Converter={StaticResource colorConverter}}" Width="12" Height="12" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                <TextBlock Text="{Binding Name}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+            <Separator/>
+
+            <Grid HorizontalAlignment="Center" Margin="0,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="130"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="26"/>
+                    <RowDefinition Height="26"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="Name:" />
+                <TextBox Grid.Row="0" Grid.Column="1" x:Name="nameTextBox" Text="Unnamed signal" Height="20" TextAlignment="Left"/>
+
+                <Label Grid.Row="1" Grid.Column="0" Content="Color:" />
+                <xctk:ColorPicker Grid.Row="1" Grid.Column="1" x:Name="colorColorPicker" ShowAvailableColors="False" SelectedColor="Blue" Height="22"/>
+
+            </Grid>
+            
+            <Separator/>
+            <Button x:Name="addButton" Content="Add" Width="60" Margin="5" IsEnabled="False" HorizontalAlignment="Right" Click="addButton_Click"/>
+        </StackPanel>
     </Grid>
 </Window>

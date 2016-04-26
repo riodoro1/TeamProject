@@ -18,12 +18,12 @@ namespace Scope
             }
         }
 
-        public TimeDomainSignal(Point[] points, Color color, String name, String verticalUnit) : base(points, color, name)
+        public TimeDomainSignal(Point[] points, Color color, string name, string verticalUnit) : base(points, color, name)
         {
             this.VerticalUnit = verticalUnit;
         }
 
-        public TimeDomainSignal(Point[] points, Color color, String name) : this(points, color, name, "V")
+        public TimeDomainSignal(Point[] points, Color color, string name) : this(points, color, name, "V")
         { }
 
         public TimeDomainSignal(Point[] points, Color color) : this(points, color, "Unnamed signal", "V")

@@ -35,33 +35,33 @@ namespace Scope
 
         private void addButton_Click(object sender, RoutedEventArgs e)
         {
-            String name = nameTextBox.Text;
+            string name = nameTextBox.Text;
             Color color = colorColorPicker.SelectedColor.Value;
 
             bool parseResult = true;
 
-            Double frequency;
-            if (!Double.TryParse(frequencyTextBox.Text, out frequency) || frequency <= 0)
+            double frequency;
+            if (!double.TryParse(frequencyTextBox.Text, out frequency) || frequency <= 0)
                 parseResult = false;
 
-            Double amplitude;
-            if(!Double.TryParse(amplitudeTextBox.Text, out amplitude) || amplitude <= 0)
+            double amplitude;
+            if(!double.TryParse(amplitudeTextBox.Text, out amplitude) || amplitude == 0)
                 parseResult = false;
 
-            Double dutyCycle;
-            if (!Double.TryParse(dutyCycleTextBox.Text, out dutyCycle) || dutyCycle <= 0 || dutyCycle > 1.0) // TO DO: localization decimal separation
+            double dutyCycle;
+            if (!double.TryParse(dutyCycleTextBox.Text, out dutyCycle) || dutyCycle <= 0 || dutyCycle > 1.0) // TO DO: localization decimal separation
                 parseResult = false;
 
-            Double dcOffset;
-            if(!Double.TryParse(dcOffsetTextBox.Text, out dcOffset))
+            double dcOffset;
+            if(!double.TryParse(dcOffsetTextBox.Text, out dcOffset))
                 parseResult = false;
 
-            Double startTime;
-            if (!Double.TryParse(startTimeTextBox.Text, out startTime))
+            double startTime;
+            if (!double.TryParse(startTimeTextBox.Text, out startTime))
                  parseResult = false;
 
-            Double duration;
-            if(!Double.TryParse(durationTextBox.Text, out duration))
+            double duration;
+            if(!double.TryParse(durationTextBox.Text, out duration))
                 parseResult = false;
 
             SignalGenerator generator;

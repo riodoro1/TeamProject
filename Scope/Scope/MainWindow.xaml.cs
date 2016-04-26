@@ -51,7 +51,7 @@ namespace Scope
             MathDialog dialog = new MathDialog(SignalDisplay.Signals);
             if (dialog.ShowDialog() == true)
             {
-                
+                SignalDisplay.AddSignal(dialog.Signal);
             }
         }
 

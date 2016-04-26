@@ -26,15 +26,15 @@ namespace Scope
 
         protected abstract double f(double time);
 
-        public TimeDomainSignal GenerateSignal(Double startTime, Double duration)
+        public TimeDomainSignal GenerateSignal(double startTime, double duration)
         {
-            Double deltaT = duration / numberOfSamples / 1000.0;
+            double deltaT = duration / numberOfSamples / 1000.0;
 
             Point[] signalPoints = new Point[numberOfSamples];
 
             for (int i = 0; i < numberOfSamples; i++)
             {
-                Double time = i * deltaT;
+                double time = i * deltaT;
                 signalPoints[i] = new Point(time + startTime / 1000.0, f(time));
             }
 
@@ -91,7 +91,7 @@ namespace Scope
         protected override double f(double time)
         {
             double duration = 1.0 / frequency;
-            return (( time % duration<= duration / 2 ) ? (time % duration * amplitude / (duration / 2)) : amplitude - (time % duration * amplitude / (duration / 2))) + dcOffset;
+            return (( time % duration<= duration / 2 ) ? (time * amplitude / (duration / 2)) : amplitude - (time % (duration / 2) * amplitude / (duration / 2))) + dcOffset;
         }
     }
 

@@ -13,15 +13,15 @@ namespace Scope
         #region Properties
         public Point[] Points;
         public Color Color { get; set; }
-        public String Name { get; set; }
+        public string Name { get; set; }
         public Boolean Visible { get; set; } = true;
-        public virtual String HorizontalUnit { get; }
-        public virtual String VerticalUnit { get; protected set; }
+        public virtual string HorizontalUnit { get; }
+        public virtual string VerticalUnit { get; protected set; }
         public Controls.SignalDisplay Display { get; set; } = null;
         #endregion
 
         #region Computed properties
-        public Double FirstXValue
+        public double FirstXValue
         {
             get
             {
@@ -29,7 +29,7 @@ namespace Scope
             }
         }
 
-        public Double LastXValue
+        public double LastXValue
         {
             get
             {
@@ -37,7 +37,7 @@ namespace Scope
             }
         }
 
-        public Double Duration
+        public double Duration
         {
             get
             {
@@ -45,7 +45,7 @@ namespace Scope
             }
         }
 
-        public Double PeakToPeak
+        public double PeakToPeak
         {
             get
             {
@@ -62,7 +62,7 @@ namespace Scope
             }
         }
 
-        public Double XStep
+        public double XStep
         {
             get
             {
@@ -71,7 +71,7 @@ namespace Scope
         }
         #endregion
 
-        public Signal(Point[] points, Color color, String name)
+        public Signal(Point[] points, Color color, string name)
         {
             Color = color;
             Points = points;
@@ -89,5 +89,40 @@ namespace Scope
             return -1;
         }
 
+        public int FirstIndexBefore(double x)
+        {
+            if (Points[0].X > x)
+                return -1;
+
+            for (int i = 0; i < Points.Length - 1; i++)
+            {
+                if (Points[i + 1].X > x)
+                    return i;
+            }
+
+            return -1;
+        }
+
+        public double? InterpolatedValueForX(double X)
+        {
+            int firstPointIndex = FirstIndexBefore(X);
+            if (firstPointIndex == -1)
+                return null;
+
+            Point firstPoint = Points[firstPointIndex];
+            if (firstPoint.X == X)
+                return firstPoint.Y;
+
+            int secondPointIndex = firstPointIndex + 1;
+            if (secondPointIndex == Points.Length)
+                return null;
+
+            Point secondPoint = Points[secondPointIndex];
+
+            double alpha = (secondPoint.X - X) / (secondPoint.X - firstPoint.X);
+            double beta = (X - firstPoint.X) / (secondPoint.X - firstPoint.X);
+
+            return alpha * firstPoint.Y + beta * secondPoint.Y;
+        }
     }
 }

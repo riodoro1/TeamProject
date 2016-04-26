@@ -8,20 +8,20 @@ using System.Windows.Data;
 
 namespace Scope
 {
-    public class Quantity : Object
+    public class Quantity : object
     {
-        private Double value;
-        private String unit;
+        private double value;
+        private string unit;
 
-        private String SIPrefix(ref Double value)
+        private string SIPrefix(ref double value)
         {
-            Double[] multipliers = { 1000000000000, 1000000000, 1000000, 1000, 1.0, 0.001, 0.000001, 0.000000001, 0.000000000001};
-            String[] prefixes = { "T", "G", "M", "k", "", "m", "µ", "n", "p" };
+            double[] multipliers = { 1000000000000, 1000000000, 1000000, 1000, 1.0, 0.001, 0.000001, 0.000000001, 0.000000000001};
+            string[] prefixes = { "T", "G", "M", "k", "", "m", "µ", "n", "p" };
 
             int prefixIndex = 0;
             for (; prefixIndex < 8; prefixIndex++)
             {
-                Double valueScaled = value / multipliers[prefixIndex];
+                double valueScaled = value / multipliers[prefixIndex];
                 if ( valueScaled >= 0.999 ) //1.0 here vould round terribly
                 {
                     break;
@@ -34,7 +34,7 @@ namespace Scope
             return prefixes[prefixIndex];
         }
 
-        public Quantity(Double _value, String _unit)
+        public Quantity(double _value, string _unit)
         {
             value = _value;
             unit = _unit;
@@ -43,8 +43,8 @@ namespace Scope
 
         public override string ToString()
         {
-            Double scaledValue = value;
-            String prefix = SIPrefix(ref scaledValue);
+            double scaledValue = value;
+            string prefix = SIPrefix(ref scaledValue);
             return scaledValue.ToString("F1") + "" + prefix + unit;
         }
     }
