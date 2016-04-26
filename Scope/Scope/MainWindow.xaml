@@ -7,7 +7,7 @@
         xmlns:controls="clr-namespace:Scope.Controls"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="408.5" Width="800" MinHeight="200" MinWidth="200">
+        Title="Scope" Height="410" Width="800" MinHeight="200" MinWidth="200">
 
     <Window.Resources>
         <ResourceDictionary>

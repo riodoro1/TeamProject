@@ -61,14 +61,6 @@ namespace Scope
                 return maximum - minimum;
             }
         }
-
-        public double XStep
-        {
-            get
-            {
-                return (FirstXValue - LastXValue) / Points.Length;
-            }
-        }
         #endregion
 
         public Signal(Point[] points, Color color, string name)

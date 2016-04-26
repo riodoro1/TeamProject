@@ -263,8 +263,14 @@ namespace Scope.Controls
 
         private Point TransformPoint(Point point)
         {
-            double x = ((point.X - StartTime) * ActualWidth) / (EndTime - StartTime);
-            double y = (ActualHeight / 2) - (point.Y * ActualHeight / majorVerticalDivisions);
+            double x = point.X;
+            double y = point.Y;
+
+            if (double.IsNaN(y))
+                y = 1;
+
+            x = ((x - StartTime) * ActualWidth) / (EndTime - StartTime);
+            y = (ActualHeight / 2) - (y * ActualHeight / majorVerticalDivisions);
 
             if (y > ActualHeight)
                 y = ActualHeight;

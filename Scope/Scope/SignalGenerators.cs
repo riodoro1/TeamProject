@@ -91,7 +91,7 @@ namespace Scope
         protected override double f(double time)
         {
             double duration = 1.0 / frequency;
-            return (( time % duration<= duration / 2 ) ? (time * amplitude / (duration / 2)) : amplitude - (time % (duration / 2) * amplitude / (duration / 2))) + dcOffset;
+            return (( time % duration<= duration / 2 ) ? ( (time % (duration/2)) * amplitude / (duration / 2)) : amplitude - (time % (duration/2) * amplitude / (duration / 2))) + dcOffset;
         }
     }
 

@@ -20,7 +20,7 @@ namespace Scope
     /// </summary>
     public partial class MathDialog : Window
     {
-        public static SignalOperator[] Operators = { new SignalSummator(), new SignalSubtractor(), new SignalMultiplier(), new SignalDivider() };
+        public static SignalOperator[] Operators = { new SignalSummator(), new SignalSubtractor(), new SignalMultiplier(), new SignalDivider(), new SignalDifferentiator(), new SignalIntegrator()};
 
         public Signal Signal = null;
 

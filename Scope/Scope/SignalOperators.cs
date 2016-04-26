@@ -149,4 +149,65 @@ namespace Scope
     }
     #endregion
 
+    public class SignalDifferentiator : SignalOperator
+    {
+        public override string Name { get { return "Differentiate"; } }
+        public override int NumberOfOperands { get { return 1; } }
+
+        public override Signal Result(params Signal[] operands)
+        {
+            Signal signal = operands[0];
+
+            Point[] resultPoints = new Point[signal.Points.Length];
+
+            int i = 0;
+            for (; i < signal.Points.Length - 1; i++ )
+            {
+                Point thisPoint = signal.Points[i];
+                Point nextPoint = signal.Points[i + 1];
+
+                double deltaX = nextPoint.X - thisPoint.X;
+                double deltaY = nextPoint.Y - thisPoint.Y;
+
+                resultPoints[i].Y = deltaY / deltaX;
+                resultPoints[i].X = thisPoint.X;
+            }
+
+            resultPoints[i].X = signal.Points[i].X;
+            resultPoints[i].Y = (signal.Points[i].Y - signal.Points[i - 1].Y) / (signal.Points[i].X - signal.Points[i - 1].X);
+
+            return new TimeDomainSignal(resultPoints);
+
+        }
+    }
+
+    public class SignalIntegrator : SignalOperator
+    {
+        public override string Name { get { return "Integrate"; } }
+        public override int NumberOfOperands { get { return 1; } }
+
+        public override Signal Result(params Signal[] operands)
+        {
+            Signal signal = operands[0];
+
+            Point[] resultPoints = new Point[signal.Points.Length - 1];
+
+            double sum = 0;
+
+            for ( int i = 0; i < signal.Points.Length - 1; i++ )
+            {
+                Point thisPoint = signal.Points[i];
+                Point nextPoint = signal.Points[i + 1];
+
+                double deltaX = nextPoint.X - thisPoint.X;
+                sum += thisPoint.Y * deltaX;
+
+                resultPoints[i].X = thisPoint.X;
+                resultPoints[i].Y = sum;
+            }
+
+            return new TimeDomainSignal(resultPoints);
+        }
+
+    }
 }

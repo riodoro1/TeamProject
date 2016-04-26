@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Scope"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:controls="clr-namespace:Scope.Controls"
              mc:Ignorable="d"
              d:DesignHeight="44" d:DesignWidth="300">
     <UserControl.Resources>
@@ -32,19 +33,23 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
+            
             <Label x:Name="DurationLabelBox" Grid.Column="0" VerticalAlignment="Center" FontFamily="Consolas" FontSize="9">
                 <MultiBinding Converter="{StaticResource doubleAndStringToQuantity}">
                     <Binding Path="Duration"/>
                     <Binding Path="HorizontalUnit"/>
                 </MultiBinding>
             </Label>
+            
             <Label x:Name="PeakToPeakLabel" Grid.Column="1" VerticalAlignment="Center" FontFamily="Consolas" FontSize="9">
                 <MultiBinding Converter="{StaticResource doubleAndStringToQuantity}" ConverterParameter="p-p">
                     <Binding Path="PeakToPeak"/>
                     <Binding Path="VerticalUnit"/>
                 </MultiBinding>
             </Label>
+            
         </Grid>
     </Grid>
 </UserControl>
