@@ -24,10 +24,15 @@ namespace Scope
 
         public Signal Signal = null;
 
-        public MathDialog(ObservableCollection<Signal> signals)
+        public MathDialog(ObservableCollection<Signal> signals, Signal selectedSignal = null)
         {
             InitializeComponent();
             DataContext = signals;
+
+            if ( selectedSignal != null )
+            {
+                firstOperandBox.SelectedItem = selectedSignal;
+            }
 
             operatorBox.ItemsSource = Operators;
         }

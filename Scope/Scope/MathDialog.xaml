@@ -6,15 +6,28 @@
         xmlns:local="clr-namespace:Scope"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="Math" Height="160" Width="400" ResizeMode="NoResize">
+        Title="Math" Height="198" Width="415" ResizeMode="NoResize">
     <Window.Resources>
         <local:ColorToSolidColorBrushValueConverter x:Key="colorConverter"/>
     </Window.Resources>
     <Grid>
         <StackPanel>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,5">
-                <ComboBox x:Name="firstOperandBox" HorizontalAlignment="Left" ItemsSource="{Binding}" IsEnabled="False"  VerticalAlignment="Top" Width="130" Margin="0,0,10,0" SelectionChanged="firstOperandBox_SelectionChanged">
+            <Grid HorizontalAlignment="Center" Margin="0,5,0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="110"/>
+                    <ColumnDefinition Width="140"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="18"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="Operand 1"/>
+                <TextBlock Grid.Column="1" Grid.Row="0" Text="Operator"/>
+                <TextBlock Grid.Column="2" Grid.Row="0" Text="Operand 2"/>
+
+                <ComboBox x:Name="firstOperandBox" Grid.Column="0" Grid.Row="1" Margin="0,0,10,0" ItemsSource="{Binding}" IsEnabled="False"  VerticalAlignment="Top" SelectionChanged="firstOperandBox_SelectionChanged">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -25,7 +38,7 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
 
-                <ComboBox x:Name="operatorBox" Width="100" Margin="0,0,10,0" SelectionChanged="operatorBox_SelectionChanged">
+                <ComboBox x:Name="operatorBox" Grid.Column="1" Grid.Row="1" Margin="0,0,10,0" SelectionChanged="operatorBox_SelectionChanged">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -35,7 +48,7 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
 
-                <ComboBox x:Name="secondOperandBox" HorizontalAlignment="Left" ItemsSource="{Binding}" IsEnabled="False" VerticalAlignment="Top" Width="130" SelectionChanged="secondOperandBox_SelectionChanged">
+                <ComboBox x:Name="secondOperandBox" Grid.Column="2" Grid.Row="1" ItemsSource="{Binding}" IsEnabled="False" VerticalAlignment="Top" SelectionChanged="secondOperandBox_SelectionChanged">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -45,10 +58,13 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-            </StackPanel>
+            </Grid>
+            
             <Separator/>
 
-            <Grid HorizontalAlignment="Center" Margin="0,0,0,0">
+            <TextBlock Text="Result" HorizontalAlignment="Stretch" TextAlignment="Center"/>
+
+            <Grid HorizontalAlignment="Center" Margin="0,0,0,3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="80"/>
                     <ColumnDefinition Width="130"/>

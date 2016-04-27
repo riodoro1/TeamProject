@@ -33,7 +33,6 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
-                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             
             <Label x:Name="DurationLabelBox" Grid.Column="0" VerticalAlignment="Center" FontFamily="Consolas" FontSize="9">

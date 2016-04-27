@@ -48,7 +48,9 @@ namespace Scope
 
         private void mathButton_Click(object sender, RoutedEventArgs e)
         {
-            MathDialog dialog = new MathDialog(SignalDisplay.Signals);
+            Signal selectedSignal = (SignalsListBox.SelectedItem as Signal);
+
+            MathDialog dialog = new MathDialog(SignalDisplay.Signals, selectedSignal);
             if (dialog.ShowDialog() == true)
             {
                 SignalDisplay.AddSignal(dialog.Signal);
