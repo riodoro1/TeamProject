@@ -98,6 +98,9 @@
     <Compile Include="SignalOperators.cs" />
     <Compile Include="SignalScrollBar.cs" />
     <Compile Include="TimeDomainSignal.cs" />
+    <Compile Include="VotagePerDivisionSelector.xaml.cs">
+      <DependentUpon>VotagePerDivisionSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimePerDivisionSelector.xaml.cs">
       <DependentUpon>TimePerDivisionSelector.xaml</DependentUpon>
     </Compile>
@@ -140,6 +143,10 @@
     <Page Include="Themes\ScrollBarStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="VotagePerDivisionSelector.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="TimePerDivisionSelector.xaml">
       <SubType>Designer</SubType>

@@ -33,6 +33,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
+                <ColumnDefinition Width="75"/>
             </Grid.ColumnDefinitions>
             
             <Label x:Name="DurationLabelBox" Grid.Column="0" VerticalAlignment="Center" FontFamily="Consolas" FontSize="9">
@@ -48,7 +49,9 @@
                     <Binding Path="VerticalUnit"/>
                 </MultiBinding>
             </Label>
-            
+
+            <controls:VoltagePerDivisionSelector x:Name="VoltagePerDivisionSelector" DataContext="{Binding}" Grid.Column="2" ValueChanged="VoltagePerDivisionSelector_ValueChanged"/>
+
         </Grid>
     </Grid>
 </UserControl>

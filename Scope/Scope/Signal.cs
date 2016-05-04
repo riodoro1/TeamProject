@@ -17,6 +17,14 @@ namespace Scope
         public Boolean Visible { get; set; } = true;
         public virtual string HorizontalUnit { get; }
         public virtual string VerticalUnit { get; protected set; }
+        public double VerticalResolution { get; set; } = 1.0;
+        public double VerticalScale
+        {
+            get
+            {
+                return 1.0 / VerticalResolution;
+            }
+        }
         public Controls.SignalDisplay Display { get; set; } = null;
         #endregion
 

@@ -261,7 +261,7 @@ namespace Scope.Controls
             }
         }
 
-        private Point TransformPoint(Point point)
+        private Point TransformPoint(Point point, double verticalScale)
         {
             double x = point.X;
             double y = point.Y;
@@ -270,7 +270,7 @@ namespace Scope.Controls
                 y = 1;
 
             x = ((x - StartTime) * ActualWidth) / (EndTime - StartTime);
-            y = (ActualHeight / 2) - (y * ActualHeight / majorVerticalDivisions);
+            y = (ActualHeight / 2) - (y * ActualHeight / majorVerticalDivisions) * verticalScale;
 
             if (y > ActualHeight)
                 y = ActualHeight;
@@ -299,35 +299,37 @@ namespace Scope.Controls
                 PathFigure figure = new PathFigure();
                 Brush signalBrush = new SolidColorBrush(signal.Color);
 
-                Point startingPoint = TransformPoint(signal.Points[startIndex]);
+                Point startingPoint = TransformPoint(signal.Points[startIndex], signal.VerticalScale);
 
                 if (startIndex > 0 && startingPoint.X > 1) //first point is too far away from left edge
                 {
-                    startingPoint = TransformPoint(new Point(StartTime, signal.InterpolatedValueForX(StartTime).Value));
+                    startingPoint = TransformPoint(new Point(StartTime, signal.InterpolatedValueForX(StartTime).Value), signal.VerticalScale);
                 } 
 
                 figure.StartPoint = startingPoint;
 
                 double lastDrawnX = -1.0;
+                double lastDrawnY = 0.0;
                 for (int i = startIndex + 1; i < signal.Points.Length; i++)
                 {
                     if (signal.Points[i].X > EndTime)
                     {
-                        Point lastPoint = TransformPoint(signal.Points[i - 1]);
+                        Point lastPoint = TransformPoint(signal.Points[i - 1], signal.VerticalScale);
                         if (lastPoint.X < ActualWidth - 1)  //last point is too far away from right edge
                         {
-                            lastPoint = TransformPoint(new Point(EndTime, signal.InterpolatedValueForX(EndTime).Value));
+                            lastPoint = TransformPoint(new Point(EndTime, signal.InterpolatedValueForX(EndTime).Value), signal.VerticalScale);
                             figure.Segments.Add(new LineSegment(lastPoint, true));
                         }
                         break;
                     }
 
-                    Point point = TransformPoint(signal.Points[i]);
-                    if ( point.X - lastDrawnX < 0.5 )
+                    Point point = TransformPoint(signal.Points[i], signal.VerticalScale);
+                    if ( point.X - lastDrawnX < 0.5 && Math.Abs(point.Y - lastDrawnY) < 0.5 )
                     {
                         continue;   //do not draw a point if it is very close to the predecessor
                     }
 
+                    lastDrawnY = point.Y;
                     lastDrawnX = point.X;
                     figure.Segments.Add(new LineSegment(point, true));
                 }

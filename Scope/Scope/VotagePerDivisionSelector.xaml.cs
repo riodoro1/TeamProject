@@ -18,28 +18,27 @@ namespace Scope.Controls
     /// <summary>
     /// Interaction logic for TimePerDivisionSelector.xaml
     /// </summary>
-    public partial class TimePerDivisionSelector : UserControl
+    public partial class VoltagePerDivisionSelector : UserControl
     {
-        private double[] values = { 0.000001,  0.000002,  0.000005,
-                                    0.00001,   0.00002,   0.00005,
-                                    0.0001,    0.0002,    0.0005,
-                                    0.001,     0.002,     0.005,
+        private double[] values = { 0.001,     0.002,     0.005,
                                     0.01,      0.02,      0.05,
                                     0.1,       0.2,       0.5,
-                                    1,         2,         5};
-        private int currentValue = 0;
+                                    1,         2,         5,
+                                    10,        20,        50,
+                                    100,       200,       500};
+        private int currentValue = 9;
 
         public event RoutedPropertyChangedEventHandler<double> ValueChanged;
 
-        public TimePerDivisionSelector()
+        public VoltagePerDivisionSelector()
         {
             InitializeComponent();
-            valueTextBlock.Text = new Quantity(values[currentValue], "s/div").ToString();
+            valueTextBlock.Text = new Quantity(values[currentValue], "V/div").ToString();
         }
 
         private void valueChanged()
         {
-            valueTextBlock.Text = new Quantity(values[currentValue], "s/div").ToString();
+            valueTextBlock.Text = new Quantity(values[currentValue], "V/div").ToString();
             RoutedPropertyChangedEventArgs<double> args = new RoutedPropertyChangedEventArgs<double>(0.0, values[currentValue]);
             if ( ValueChanged != null )
                 ValueChanged(this, args);

@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="Scope.Controls.VoltagePerDivisionSelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Scope"
+             mc:Ignorable="d" d:DesignWidth="100" Height="18">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="9"/>
+            <ColumnDefinition Width="9"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+
+        <Border Grid.Column="0" BorderBrush="LightGray" BorderThickness="1" Background="White" Height="18">
+            <TextBlock VerticalAlignment="Center" x:Name="valueTextBlock" FontFamily="Consolas" FontSize="9"/>
+        </Border>
+
+        <RepeatButton Grid.Column="1" FontSize="8" Click="UpButton_Click" Padding="0">▴</RepeatButton>
+        <RepeatButton Grid.Column="2" FontSize="8" Click="DnButton_Click" Padding="0">▾</RepeatButton>
+
+    </Grid>
+</UserControl>

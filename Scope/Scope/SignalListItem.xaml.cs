@@ -111,5 +111,14 @@ namespace Scope.Controls
                 }
             }
         }
+
+        private void VoltagePerDivisionSelector_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Signal.VerticalResolution = e.NewValue;
+            if (Signal.Display != null)
+            {
+                Signal.Display.RefreshDisplay();
+            }
+        }
     }
 }
