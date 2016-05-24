@@ -20,6 +20,61 @@ namespace Scope.Controls
 {
     public class SignalDisplay : Canvas
     {
+        private class SignalCursor
+        {
+            private void normalize()
+            {
+                if ( _end < _start )
+                {
+                    double t = _start;
+                    _start = _end;
+                    _end = t;
+                }
+            }
+
+            private double _start;
+            private double _end;
+
+            public double Start
+            {
+                get
+                {
+                    return _start;
+                }
+                set
+                {
+                    _start = value;
+                    normalize();
+                }
+            }
+            public double End
+            {
+                get
+                {
+                    return _end;
+                }
+                set
+                {
+                    _end = value;
+                    normalize();
+                }
+            }
+
+            public double Length
+            {
+                get
+                {
+                    return End - Start;
+                }
+            }
+
+            SignalCursor(double start, double end)
+            {
+                _start = start; _end = end;
+                normalize();
+            }
+        }
+
         #region Properties
         public ObservableCollection<Signal> Signals { get; private set; }
         public SignalScrollBar ScrollBar
@@ -103,6 +158,7 @@ namespace Scope.Controls
             }
         }
         public Color GraticuleColor { get; set; } = Colors.Gray;
+        public Color SignalCursorColor { get; set; } = Colors.Black;
 
         public double MinimumTime
         {
@@ -197,8 +253,49 @@ namespace Scope.Controls
         public SignalDisplay()
         {
             Signals = new ObservableCollection<Signal>();
+            registerCursorEvents();
         }
         #endregion
+
+
+        #region test 
+
+        SignalCursor VerticalCursor;
+
+        private void registerCursorEvents()
+        {
+            MouseDown += cursorMouseDown;
+            MouseUp += cursorMouseUp;
+            MouseMove += cursorMouseMove;
+        }
+        
+        private void cursorMouseMove(object sender, MouseEventArgs e)
+        {
+            Point mousePosition = TransformPointToDivision(e.GetPosition(this));
+            
+        }
+
+        private void cursorMouseUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void cursorMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Point mousePosition = TransformPointToDivision(e.GetPosition(this));
+            
+        }
+
+        private void DrawSignalCursors(DrawingContext dc)
+        {
+            Pen cursorPen = new Pen(new SolidColorBrush(SignalCursorColor), 1.0);
+            cursorPen.DashStyle = DashStyles.Dash;
+
+            
+        }
+
+        #endregion
+
 
         #region Data manipulation methods
         public void AddSignal(Signal signal)
@@ -261,7 +358,23 @@ namespace Scope.Controls
             }
         }
 
-        private Point TransformPoint(Point point, double verticalScale)
+        private Point TransformPointToDivision(Point point)
+        {
+            double divisionWidth = ActualWidth / majorHorizontalDivisions;
+            double divisionHeight = ActualHeight / majorVerticalDivisions;
+
+            return new Point(point.X / divisionWidth, point.Y / divisionHeight);
+        }
+
+        private Point TransformPointToScreen(Point point)
+        {
+            double divisionWidth = ActualWidth / majorHorizontalDivisions;
+            double divisionHeight = ActualHeight / majorVerticalDivisions;
+
+            return new Point(point.X * divisionWidth, point.Y * divisionHeight);
+        }
+
+        private Point TransformSignalPointToScreen(Point point, double verticalScale)
         {
             double x = point.X;
             double y = point.Y;
@@ -299,11 +412,11 @@ namespace Scope.Controls
                 PathFigure figure = new PathFigure();
                 Brush signalBrush = new SolidColorBrush(signal.Color);
 
-                Point startingPoint = TransformPoint(signal.Points[startIndex], signal.VerticalScale);
+                Point startingPoint = TransformSignalPointToScreen(signal.Points[startIndex], signal.VerticalScale);
 
                 if (startIndex > 0 && startingPoint.X > 1) //first point is too far away from left edge
                 {
-                    startingPoint = TransformPoint(new Point(StartTime, signal.InterpolatedValueForX(StartTime).Value), signal.VerticalScale);
+                    startingPoint = TransformSignalPointToScreen(new Point(StartTime, signal.InterpolatedValueForX(StartTime).Value), signal.VerticalScale);
                 } 
 
                 figure.StartPoint = startingPoint;
@@ -314,16 +427,16 @@ namespace Scope.Controls
                 {
                     if (signal.Points[i].X > EndTime)
                     {
-                        Point lastPoint = TransformPoint(signal.Points[i - 1], signal.VerticalScale);
+                        Point lastPoint = TransformSignalPointToScreen(signal.Points[i - 1], signal.VerticalScale);
                         if (lastPoint.X < ActualWidth - 1)  //last point is too far away from right edge
                         {
-                            lastPoint = TransformPoint(new Point(EndTime, signal.InterpolatedValueForX(EndTime).Value), signal.VerticalScale);
+                            lastPoint = TransformSignalPointToScreen(new Point(EndTime, signal.InterpolatedValueForX(EndTime).Value), signal.VerticalScale);
                             figure.Segments.Add(new LineSegment(lastPoint, true));
                         }
                         break;
                     }
 
-                    Point point = TransformPoint(signal.Points[i], signal.VerticalScale);
+                    Point point = TransformSignalPointToScreen(signal.Points[i], signal.VerticalScale);
                     if ( point.X - lastDrawnX < 0.5 && Math.Abs(point.Y - lastDrawnY) < 0.5 )
                     {
                         continue;   //do not draw a point if it is very close to the predecessor
@@ -346,6 +459,7 @@ namespace Scope.Controls
             
             DrawSignals(dc);
             DrawGraticule(dc);
+            DrawSignalCursors(dc);
         }
         #endregion
     }
