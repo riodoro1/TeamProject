@@ -16,62 +16,65 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+
 namespace Scope.Controls
 {
     public class SignalDisplay : Canvas
     {
-        private class SignalCursor
+        private class DisplayCursor
         {
-            private void normalize()
-            {
-                if ( _end < _start )
-                {
-                    double t = _start;
-                    _start = _end;
-                    _end = t;
-                }
-            }
+            private double position;
 
-            private double _start;
-            private double _end;
-
-            public double Start
+            public double Position
             {
                 get
                 {
-                    return _start;
+                    return position;
                 }
                 set
                 {
-                    _start = value;
-                    normalize();
+                    position = value;
                 }
             }
-            public double End
+
+            public DisplayCursor(double position)
             {
-                get
-                {
-                    return _end;
-                }
-                set
-                {
-                    _end = value;
-                    normalize();
-                }
+                Position = position;
             }
+        }
+
+        private class CursorPair
+        {
+            private static double hitTreshold = 0.1;
+
+            public DisplayCursor CursorOne;
+            public DisplayCursor CursorTwo;
 
             public double Length
             {
                 get
                 {
-                    return End - Start;
+                    return Math.Abs(CursorOne.Position - CursorTwo.Position);
                 }
             }
 
-            SignalCursor(double start, double end)
+            public CursorPair(double start = 0.0, double end = 1.0)
             {
-                _start = start; _end = end;
-                normalize();
+                CursorOne = new DisplayCursor(start);
+                CursorTwo = new DisplayCursor(end);
+            }
+
+            public DisplayCursor CursorAtPosition(double position)
+            {
+                if ( Math.Abs(CursorOne.Position - position) <= hitTreshold)
+                {
+                    return CursorOne;
+                }
+                if (Math.Abs(CursorTwo.Position - position) <= hitTreshold)
+                {
+                    return CursorTwo;
+                }
+                return null;
             }
         }
 
@@ -189,7 +192,7 @@ namespace Scope.Controls
         #endregion
 
         #region Dependency properties
-        public static readonly DependencyProperty SignalsListBoxProperty = DependencyProperty.Register("SignalsListBox", typeof(ListBox), typeof(SignalDisplay), new UIPropertyMetadata(null));
+        public static readonly DependencyProperty SignalsListBoxProperty = DependencyProperty.Register("SignalsListBox", typeof(ListBox), typeof(SignalDisplay), new PropertyMetadata(OnSignalListBoxPropertyChanged));
         public static readonly DependencyProperty ScrollBarProperty = DependencyProperty.Register("ScrollBar", typeof(SignalScrollBar), typeof(SignalDisplay), new PropertyMetadata(OnScrollBarPropertyChanged));
         public static readonly DependencyProperty InfoBarProperty = DependencyProperty.Register("InfoBar", typeof(SignalDisplayInfoBar), typeof(SignalDisplay), new UIPropertyMetadata(null));
         public static readonly DependencyProperty TimePerDivSelectorProperty = DependencyProperty.Register("TimePerDivisionSelector", typeof(TimePerDivisionSelector), typeof(SignalDisplay), new PropertyMetadata(OnTimePerDivSelectorPropertyChanged));
@@ -229,11 +232,55 @@ namespace Scope.Controls
             timePerDivision = e.NewValue;
             RefreshDisplay();
         }
-  
-        
+
+        private static void OnSignalListBoxPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        {
+            SignalDisplay disp = (obj as SignalDisplay);
+            disp.SignalsListBox.SelectionChanged += new SelectionChangedEventHandler(disp.OnSelectionChanged);
+        }
+        private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            RefreshDisplay();
+        }
+
+
         private void UpdateInfoBar()
         {
             InfoBar.TimePerDivision.Content = (new Quantity(timePerDivision, "s/div")).ToString();
+            if (VerticalCursor != null)
+            {
+                InfoBar.DeltaTime.Content = "Δt=" +
+                                             (new Quantity(VerticalCursor.Length * timePerDivision, "s")).ToString();
+
+                InfoBar.InverseDeltaTime.Content = " 1/Δt=" +
+                                                    (new Quantity(1 / (VerticalCursor.Length * timePerDivision), "Hz")).ToString();
+            }
+            else
+            {
+                InfoBar.DeltaTime.Content = "";
+                InfoBar.InverseDeltaTime.Content = "";
+            }
+
+            if ( HorizontalCursor != null )
+            {
+                Signal selectedSignal = (SignalsListBox.SelectedItem as Signal);
+                if ( selectedSignal != null )
+                {
+                    InfoBar.Amplitude.Foreground = new SolidColorBrush(selectedSignal.Color);
+                    InfoBar.Amplitude.Content = "A=" +
+                                                (new Quantity(HorizontalCursor.Length * selectedSignal.VerticalResolution, selectedSignal.VerticalUnit));
+                }
+                else
+                {
+                    InfoBar.Amplitude.Foreground = new SolidColorBrush(Colors.Black);
+                    InfoBar.Amplitude.Content = "A="+
+                                                (new Quantity(HorizontalCursor.Length, "div"));
+                }
+            }
+            else
+            {
+                InfoBar.Amplitude.Content = "";
+            }
         }
 
         public void RefreshDisplay()
@@ -257,10 +304,12 @@ namespace Scope.Controls
         }
         #endregion
 
+        #region Cursors 
 
-        #region test 
-
-        SignalCursor VerticalCursor;
+        DisplayCursor VerticalDraggedCursor = null;
+        DisplayCursor HorizontalDraggedCursor = null;
+        CursorPair VerticalCursor = null;
+        CursorPair HorizontalCursor = null;
 
         private void registerCursorEvents()
         {
@@ -272,18 +321,61 @@ namespace Scope.Controls
         private void cursorMouseMove(object sender, MouseEventArgs e)
         {
             Point mousePosition = TransformPointToDivision(e.GetPosition(this));
-            
+
+            if ( VerticalDraggedCursor != null )
+            {
+                VerticalDraggedCursor.Position = mousePosition.X;
+            }
+            if (HorizontalDraggedCursor != null)
+            {
+                HorizontalDraggedCursor.Position = mousePosition.Y;
+            }
+
+            RefreshDisplay();
         }
 
         private void cursorMouseUp(object sender, MouseButtonEventArgs e)
         {
-
+            VerticalDraggedCursor = null;
+            HorizontalDraggedCursor = null;
         }
 
         private void cursorMouseDown(object sender, MouseButtonEventArgs e)
         {
             Point mousePosition = TransformPointToDivision(e.GetPosition(this));
+
+            if ( HorizontalCursor != null )
+            {
+                HorizontalDraggedCursor = HorizontalCursor.CursorAtPosition(mousePosition.Y);
+                if ( HorizontalDraggedCursor == null && e.ChangedButton == MouseButton.Right)
+                {
+                    //no cursor clicked
+                    HorizontalCursor = null;
+                }
+            }
+            else if ( e.ChangedButton == MouseButton.Right )
+            {
+                HorizontalCursor = new CursorPair(mousePosition.Y, mousePosition.Y + 1.0);
+                HorizontalDraggedCursor = HorizontalCursor.CursorOne;
+            }
             
+
+            if ( VerticalCursor != null )
+            {
+                VerticalDraggedCursor = VerticalCursor.CursorAtPosition(mousePosition.X);
+                if ( VerticalDraggedCursor == null && e.ChangedButton == MouseButton.Left)
+                {
+                    //no cursor clicked
+                    VerticalCursor = null;
+                }
+            }
+            else if ( e.ChangedButton == MouseButton.Left )
+            {
+                VerticalCursor = new CursorPair(mousePosition.X, mousePosition.X + 1.0);
+                VerticalDraggedCursor = VerticalCursor.CursorOne;
+            }
+
+            RefreshDisplay();
         }
 
         private void DrawSignalCursors(DrawingContext dc)
@@ -291,7 +383,25 @@ namespace Scope.Controls
             Pen cursorPen = new Pen(new SolidColorBrush(SignalCursorColor), 1.0);
             cursorPen.DashStyle = DashStyles.Dash;
 
-            
+            if ( VerticalCursor != null )
+            {
+                dc.DrawLine(    cursorPen, 
+                                TransformPointToScreen(new Point(VerticalCursor.CursorOne.Position, 0)), 
+                                TransformPointToScreen(new Point(VerticalCursor.CursorOne.Position, majorVerticalDivisions)));
+                dc.DrawLine(    cursorPen,
+                                TransformPointToScreen(new Point(VerticalCursor.CursorTwo.Position, 0)),
+                                TransformPointToScreen(new Point(VerticalCursor.CursorTwo.Position, majorVerticalDivisions)));
+            }
+
+            if (HorizontalCursor != null)
+            {
+                dc.DrawLine(    cursorPen,
+                                TransformPointToScreen(new Point(0, HorizontalCursor.CursorOne.Position)),
+                                TransformPointToScreen(new Point(majorHorizontalDivisions, HorizontalCursor.CursorOne.Position)));
+                dc.DrawLine(    cursorPen,
+                                TransformPointToScreen(new Point(0, HorizontalCursor.CursorTwo.Position)),
+                                TransformPointToScreen(new Point(majorHorizontalDivisions, HorizontalCursor.CursorTwo.Position)));
+            }
         }
 
         #endregion

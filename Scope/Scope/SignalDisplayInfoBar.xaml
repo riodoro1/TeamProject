@@ -9,8 +9,12 @@
              Background="White">
     <Grid>
         <StackPanel Orientation="Horizontal" Height="20">
-            <Label x:Name="TimePerDivision" FontFamily="Consolas" FontSize="9">1.0 µs/div</Label>
-            
+            <Label x:Name="TimePerDivision" FontFamily="Consolas" FontSize="9">1.0µs/div</Label>
+
+            <Label x:Name="DeltaTime" FontFamily="Consolas" FontSize="9"></Label>
+            <Label x:Name="InverseDeltaTime" FontFamily="Consolas" FontSize="9"></Label>
+
+            <Label x:Name="Amplitude" FontFamily="Consolas" FontSize="9"></Label>
         </StackPanel>
     </Grid>
 </UserControl>

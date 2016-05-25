@@ -20,7 +20,7 @@ namespace Scope
 
         public TimeDomainSignal(Point[] points, Color color, string name, string verticalUnit) : base(points, color, name)
         {
-            this.VerticalUnit = verticalUnit;
+            VerticalUnit = verticalUnit;
         }
 
         public TimeDomainSignal(Point[] points, Color color, string name) : this(points, color, name, "V")

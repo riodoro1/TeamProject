@@ -16,7 +16,7 @@ namespace Scope
         public string Name { get; set; }
         public Boolean Visible { get; set; } = true;
         public virtual string HorizontalUnit { get; }
-        public virtual string VerticalUnit { get; protected set; }
+        public virtual string VerticalUnit { get; set; }
         public double VerticalResolution { get; set; } = 1.0;
         public double VerticalScale
         {

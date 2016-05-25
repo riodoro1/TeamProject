@@ -11,17 +11,18 @@ namespace Scope
 {
     class SignalOpener
     {
-        private StreamReader fileReader;
-        private string fileName;
+        private string filePath;
 
         public SignalOpener(string path)
         {
-            fileReader = new StreamReader(path);
-            fileName = Path.GetFileNameWithoutExtension(path);
+            filePath = path;
         }
         
         public Signal readSignal()
         {
+            StreamReader fileReader = new StreamReader(filePath);
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
+
             List<Point> readPoints = new List<Point>();
             string line;
             while ((line = fileReader.ReadLine()) != null)
@@ -41,7 +42,7 @@ namespace Scope
             }
 
             string name = fileName;
-
+            fileReader.Close();
             return new TimeDomainSignal(readPoints.ToArray(), Colors.Blue, name);
         }
 

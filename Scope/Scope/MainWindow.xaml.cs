@@ -98,7 +98,7 @@ namespace Scope
                             SignalDisplay.StartTime = signal.FirstXValue;
                         }
                     }
-                    catch ( FileLoadException ex )
+                    catch ( FileLoadException )
                     {
                         //file could not be open, maybe an error?
                     }
